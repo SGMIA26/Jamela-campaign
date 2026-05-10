@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jamela — Dragon Fruit Jam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C0392B;
+    --red-light: #F5E6E4;
+    --red-mid: #E8B4AF;
+    --green: #2D6A4F;
+    --green-light: #E8F5EE;
+    --gold: #B7791F;
+    --gold-light: #FEF3C7;
+    --ink: #1A1A1A;
+    --ink-mid: #4A4A4A;
+    --ink-soft: #8A8A8A;
+    --cream: #FDFAF6;
+    --cream-dark: #F5EFE6;
+    --white: #FFFFFF;
+    --border: #E8E0D5;
+    --radius: 12px;
+    --radius-lg: 20px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(253,250,246,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 900;
+    color: var(--red);
+    letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--ink); font-weight: 700; }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a {
+    font-size: 13px; font-weight: 500; color: var(--ink-mid);
+    text-decoration: none; transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--red); }
+  .lang-switcher {
+    display: flex; gap: 4px; background: var(--cream-dark);
+    border-radius: 20px; padding: 3px;
+  }
+  .lang-btn {
+    font-size: 11px; font-weight: 600; padding: 4px 10px;
+    border-radius: 16px; border: none; cursor: pointer;
+    background: transparent; color: var(--ink-soft);
+    transition: all .2s;
+  }
+  .lang-btn.active {
+    background: var(--white); color: var(--red);
+    box-shadow: 0 1px 4px rgba(0,0,0,.1);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    padding: 100px 5% 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    background: linear-gradient(135deg, var(--cream) 0%, var(--red-light) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(192,57,43,.12) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--red); color: var(--white);
+    font-size: 11px; font-weight: 600; letter-spacing: .5px;
+    padding: 6px 14px; border-radius: 20px;
+    margin-bottom: 24px;
+    animation: fadeUp .6s ease both;
+  }
+  .hero-badge::before {
+    content: ''; width: 6px; height: 6px; background: #FFD700;
+    border-radius: 50%; animation: pulse 1.5s ease infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 900; line-height: 1.05;
+    color: var(--ink); margin-bottom: 20px;
+    animation: fadeUp .6s .1s ease both;
+  }
+  .hero h1 em { color: var(--red); font-style: italic; }
+  .hero-sub {
+    font-size: 17px; line-height: 1.65; color: var(--ink-mid);
+    max-width: 480px; margin-bottom: 36px;
+    animation: fadeUp .6s .2s ease both;
+  }
+  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; animation: fadeUp .6s .3s ease both; }
+  .btn-primary {
+    background: var(--red); color: var(--white);
+    padding: 14px 28px; border-radius: 50px;
+    font-size: 15px; font-weight: 600; border: none;
+    cursor: pointer; transition: all .2s;
+    box-shadow: 0 4px 20px rgba(192,57,43,.35);
+  }
+  .btn-primary:hover { background: #A93226; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(192,57,43,.4); }
+  .btn-secondary {
+    background: transparent; color: var(--ink);
+    padding: 14px 28px; border-radius: 50px;
+    font-size: 15px; font-weight: 500;
+    border: 1.5px solid var(--border); cursor: pointer; transition: all .2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .btn-secondary:hover { border-color: var(--red); color: var(--red); }
+  .btn-secondary::before { content: '▶'; font-size: 10px; }
+
+  /* Progress card */
+  .hero-right { animation: fadeUp .6s .2s ease both; }
+  .progress-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.1);
+    border: 1px solid var(--border);
+  }
+  .progress-header {
+    display: flex; justify-content: space-between;
+    align-items: flex-end; margin-bottom: 16px;
+  }
+  .amount-raised {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px; font-weight: 900; color: var(--red);
+  }
+  .amount-goal { font-size: 13px; color: var(--ink-soft); }
+  .progress-bar-track {
+    height: 10px; background: var(--cream-dark);
+    border-radius: 6px; overflow: hidden; margin-bottom: 20px;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--red) 0%, #E74C3C 100%);
+    border-radius: 6px;
+    width: 0%; transition: width 1.5s cubic-bezier(.4,0,.2,1);
+  }
+  .progress-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 8px; margin-bottom: 24px;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px; font-weight: 700; color: var(--ink);
+    display: block;
+  }
+  .stat-lbl { font-size: 11px; color: var(--ink-soft); font-weight: 500; }
+  .pledge-btn {
+    width: 100%; background: var(--red); color: var(--white);
+    padding: 16px; border-radius: 50px; border: none;
+    font-size: 16px; font-weight: 600; cursor: pointer;
+    transition: all .2s;
+    box-shadow: 0 4px 20px rgba(192,57,43,.3);
+  }
+  .pledge-btn:hover { background: #A93226; transform: translateY(-2px); }
+  .trust-row {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px; margin-top: 16px;
+    font-size: 11px; color: var(--ink-soft);
+  }
+  .trust-row span { display: flex; align-items: center; gap: 4px; }
+
+  /* ── SECTION SHARED ── */
+  section { padding: 80px 5%; }
+  .section-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--red);
+    margin-bottom: 14px;
+    padding: 4px 12px; border-radius: 20px;
+    background: var(--red-light);
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 700; line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .section-sub { font-size: 17px; color: var(--ink-mid); line-height: 1.6; max-width: 600px; }
+
+  /* ── STORY ── */
+  .story-section { background: var(--white); }
+  .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .story-visual {
+    position: relative;
+    background: linear-gradient(135deg, #8B1A1A 0%, #C0392B 40%, #E8B4AF 100%);
+    border-radius: var(--radius-lg);
+    aspect-ratio: 4/5;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .story-emoji { font-size: 80px; margin-bottom: 16px; }
+  .story-visual-text {
+    color: rgba(255,255,255,.9);
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 700;
+    text-align: center; padding: 0 24px;
+  }
+  .story-stats {
+    display: grid; grid-template-columns: repeat(3,1fr);
+    gap: 16px; margin-top: 40px;
+  }
+  .story-stat {
+    padding: 20px 16px;
+    background: var(--cream); border-radius: var(--radius);
+    text-align: center;
+  }
+  .story-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px; font-weight: 900; color: var(--red);
+    display: block;
+  }
+  .story-stat-lbl { font-size: 12px; color: var(--ink-soft); margin-top: 4px; }
+  .story-text p { margin-bottom: 18px; font-size: 16px; line-height: 1.75; color: var(--ink-mid); }
+
+  /* ── INGREDIENTS ── */
+  .ingredients-section { background: var(--cream); }
+  .ingredients-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; margin-top: 48px; }
+  .ingredient-card {
+    background: var(--white); border-radius: var(--radius);
+    padding: 28px 20px; text-align: center;
+    border: 1px solid var(--border);
+    transition: all .25s; cursor: default;
+  }
+  .ingredient-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,.08); border-color: var(--red-mid); }
+  .ingredient-emoji { font-size: 44px; margin-bottom: 14px; display: block; }
+  .ingredient-name { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+  .ingredient-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+  .cert-row {
+    margin-top: 48px; background: var(--green-light);
+    border-radius: var(--radius); padding: 28px 32px;
+    display: grid; grid-template-columns: repeat(2,1fr); gap: 12px;
+  }
+  .cert-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--green); font-weight: 500; }
+  .cert-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .cert-done { background: var(--green); }
+  .cert-pending { background: var(--gold); }
+
+  /* ── TIERS ── */
+  .tiers-section { background: var(--white); }
+  .tiers-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 48px; }
+  .tier-card {
+    border-radius: var(--radius-lg); padding: 32px 28px;
+    border: 1.5px solid var(--border);
+    transition: all .25s; position: relative;
+    background: var(--white);
+  }
+  .tier-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,.08); }
+  .tier-card.popular {
+    border-color: var(--red); background: var(--white);
+    box-shadow: 0 8px 40px rgba(192,57,43,.15);
+  }
+  .popular-badge {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--red); color: var(--white);
+    font-size: 11px; font-weight: 600;
+    padding: 4px 16px; border-radius: 20px; white-space: nowrap;
+  }
+  .tier-name { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: var(--ink-soft); margin-bottom: 10px; }
+  .tier-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 44px; font-weight: 900; color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .tier-limit { font-size: 12px; color: var(--red); font-weight: 600; margin-bottom: 20px; }
+  .tier-divider { height: 1px; background: var(--border); margin: 20px 0; }
+  .tier-items { list-style: none; margin-bottom: 28px; }
+  .tier-items li {
+    font-size: 14px; color: var(--ink-mid);
+    padding: 6px 0; display: flex; align-items: flex-start; gap: 10px;
+  }
+  .tier-items li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .tier-eta { font-size: 12px; color: var(--ink-soft); margin-bottom: 20px; }
+  .tier-btn {
+    width: 100%; padding: 14px; border-radius: 50px;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: all .2s;
+    border: 1.5px solid var(--red); color: var(--red); background: transparent;
+  }
+  .tier-btn:hover, .tier-card.popular .tier-btn {
+    background: var(--red); color: var(--white);
+    box-shadow: 0 4px 16px rgba(192,57,43,.3);
+  }
+
+  /* ── BUDGET ── */
+  .budget-section { background: var(--ink); color: var(--white); }
+  .budget-section .section-badge { background: rgba(192,57,43,.3); color: #F5A49B; }
+  .budget-section .section-title { color: var(--white); }
+  .budget-bars { margin-top: 48px; display: flex; flex-direction: column; gap: 20px; }
+  .budget-item { }
+  .budget-label-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .budget-label { font-size: 15px; font-weight: 500; color: rgba(255,255,255,.9); }
+  .budget-amount { font-size: 15px; font-weight: 700; color: var(--red-mid); }
+  .budget-track { height: 8px; background: rgba(255,255,255,.1); border-radius: 4px; overflow: hidden; }
+  .budget-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--red) 0%, #E74C3C 100%); }
+  .budget-desc { font-size: 13px; color: rgba(255,255,255,.45); margin-top: 6px; }
+  .stretch-box {
+    margin-top: 48px; padding: 28px 32px;
+    background: rgba(192,57,43,.15);
+    border: 1px solid rgba(192,57,43,.4);
+    border-radius: var(--radius-lg);
+  }
+  .stretch-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: var(--red-mid); margin-bottom: 8px; }
+  .stretch-amount { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; color: var(--white); margin-bottom: 10px; }
+  .stretch-desc { font-size: 14px; color: rgba(255,255,255,.6); line-height: 1.6; }
+
+  /* ── FAQ ── */
+  .faq-section { background: var(--cream); }
+  .faq-grid { margin-top: 48px; display: flex; flex-direction: column; gap: 4px; }
+  .faq-item {
+    background: var(--white); border-radius: var(--radius);
+    border: 1px solid var(--border); overflow: hidden;
+  }
+  .faq-q {
+    padding: 20px 24px; font-size: 15px; font-weight: 600;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    transition: color .2s;
+  }
+  .faq-q:hover { color: var(--red); }
+  .faq-toggle { font-size: 20px; color: var(--ink-soft); transition: transform .3s; }
+  .faq-a {
+    padding: 0 24px; max-height: 0; overflow: hidden;
+    font-size: 15px; color: var(--ink-mid); line-height: 1.7;
+    transition: all .3s ease;
+  }
+  .faq-item.open .faq-a { max-height: 200px; padding: 0 24px 20px; }
+  .faq-item.open .faq-toggle { transform: rotate(45deg); color: var(--red); }
+
+  /* ── PAYMENT MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,.6); backdrop-filter: blur(4px);
+    display: none; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--white); border-radius: var(--radius-lg);
+    width: 100%; max-width: 480px;
+    padding: 36px; position: relative;
+    box-shadow: 0 30px 80px rgba(0,0,0,.2);
+    animation: modalIn .3s ease both;
+  }
+  @keyframes modalIn { from{opacity:0;transform:scale(.95)} to{opacity:1;transform:scale(1)} }
+  .modal-close {
+    position: absolute; top: 16px; right: 16px;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--cream-dark); border: none; cursor: pointer;
+    font-size: 16px; display: flex; align-items: center; justify-content: center;
+    transition: background .2s;
+  }
+  .modal-close:hover { background: var(--border); }
+  .modal-tier-name { font-size: 12px; text-transform: uppercase; letter-spacing: .8px; color: var(--ink-soft); margin-bottom: 6px; }
+  .modal-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; margin-bottom: 24px; }
+  .payment-tabs { display: flex; gap: 8px; margin-bottom: 24px; }
+  .pay-tab {
+    flex: 1; padding: 10px; border-radius: var(--radius);
+    border: 1.5px solid var(--border); cursor: pointer; background: var(--white);
+    font-size: 13px; font-weight: 600; color: var(--ink-soft);
+    transition: all .2s;
+  }
+  .pay-tab.active { border-color: var(--red); color: var(--red); background: var(--red-light); }
+  .pay-tab.hidden { display: none; }
+  .pay-panel { display: none; }
+  .pay-panel.active { display: block; }
+
+  /* SePay panel */
+  .qr-box {
+    background: var(--cream); border-radius: var(--radius);
+    padding: 24px; text-align: center; margin-bottom: 16px;
+  }
+  .qr-placeholder {
+    width: 160px; height: 160px;
+    background: var(--white); border: 2px dashed var(--border);
+    border-radius: 8px; margin: 0 auto 12px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-size: 11px; color: var(--ink-soft); gap: 6px;
+  }
+  .qr-placeholder .qr-icon { font-size: 36px; }
+  .qr-amount { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--red); }
+  .qr-bank { font-size: 12px; color: var(--ink-soft); margin-top: 4px; }
+  .bank-info { background: var(--cream-dark); border-radius: 8px; padding: 12px 16px; font-size: 13px; }
+  .bank-row { display: flex; justify-content: space-between; padding: 4px 0; }
+  .bank-row span:first-child { color: var(--ink-soft); }
+  .bank-row span:last-child { font-weight: 600; color: var(--ink); }
+
+  /* Paddle panel */
+  .form-group { margin-bottom: 16px; }
+  .form-label { font-size: 13px; font-weight: 500; color: var(--ink-mid); margin-bottom: 6px; display: block; }
+  .form-input {
+    width: 100%; padding: 12px 14px; border-radius: 8px;
+    border: 1.5px solid var(--border); font-size: 14px;
+    background: var(--cream); transition: border-color .2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .form-input:focus { outline: none; border-color: var(--red); }
+  .pay-confirm {
+    width: 100%; background: var(--red); color: var(--white);
+    padding: 14px; border-radius: 50px; border: none;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    transition: all .2s; margin-top: 8px;
+    box-shadow: 0 4px 16px rgba(192,57,43,.3);
+  }
+  .pay-confirm:hover { background: #A93226; transform: translateY(-1px); }
+  .pay-secure { text-align: center; font-size: 11px; color: var(--ink-soft); margin-top: 10px; }
+
+  /* ── THANK YOU ── */
+  .thankyou-overlay {
+    position: fixed; inset: 0; z-index: 300;
+    background: var(--white); display: none;
+    flex-direction: column; align-items: center; justify-content: center;
+    padding: 40px; text-align: center;
+  }
+  .thankyou-overlay.open { display: flex; }
+  .ty-emoji { font-size: 64px; margin-bottom: 20px; }
+  .ty-title { font-family: 'Playfair Display', serif; font-size: 38px; font-weight: 700; color: var(--red); margin-bottom: 12px; }
+  .ty-sub { font-size: 17px; color: var(--ink-mid); max-width: 460px; margin: 0 auto 36px; line-height: 1.6; }
+  .upsell-box {
+    background: var(--cream); border-radius: var(--radius-lg);
+    padding: 28px 32px; max-width: 440px; width: 100%;
+    border: 1.5px dashed var(--red-mid); margin-bottom: 24px;
+  }
+  .upsell-title { font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+  .upsell-desc { font-size: 14px; color: var(--ink-mid); margin-bottom: 20px; line-height: 1.5; }
+  .upsell-btns { display: flex; flex-direction: column; gap: 10px; }
+  .btn-upsell-yes {
+    background: var(--red); color: var(--white);
+    padding: 13px; border-radius: 50px; border: none;
+    font-size: 15px; font-weight: 600; cursor: pointer; transition: all .2s;
+  }
+  .btn-upsell-yes:hover { background: #A93226; }
+  .btn-upsell-no {
+    background: transparent; color: var(--ink-soft);
+    padding: 10px; border: none; cursor: pointer;
+    font-size: 14px; text-decoration: underline; transition: color .2s;
+  }
+  .btn-upsell-no:hover { color: var(--ink); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink); color: rgba(255,255,255,.5);
+    padding: 40px 5%; display: flex;
+    justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; color: var(--red); }
+  .footer-tagline { font-size: 13px; color: rgba(255,255,255,.4); margin-top: 4px; }
+  .footer-links { display: flex; gap: 20px; font-size: 13px; }
+  .footer-links a { color: rgba(255,255,255,.5); text-decoration: none; }
+  .footer-links a:hover { color: var(--white); }
+
+  /* ── FOUNDER STORY ── */
+  .founder-section {
+    background: linear-gradient(180deg, var(--cream-dark) 0%, var(--cream) 100%);
+    padding: 100px 5%;
+    position: relative; overflow: hidden;
+  }
+  .founder-section::before {
+    content: '"';
+    position: absolute; top: 40px; left: 4%;
+    font-family: 'Playfair Display', serif;
+    font-size: 200px; line-height: 1;
+    color: var(--red); opacity: .07;
+    pointer-events: none;
+  }
+  .founder-inner { max-width: 900px; margin: 0 auto; }
+  .founder-header { text-align: center; margin-bottom: 64px; }
+  .founder-timeline { display: flex; flex-direction: column; gap: 0; position: relative; }
+  .founder-timeline::before {
+    content: '';
+    position: absolute; left: 28px; top: 0; bottom: 0;
+    width: 2px; background: linear-gradient(180deg, var(--red) 0%, var(--red-mid) 60%, transparent 100%);
+  }
+  .timeline-item {
+    display: grid; grid-template-columns: 60px 1fr;
+    gap: 28px; padding-bottom: 48px; position: relative;
+  }
+  .timeline-item:last-child { padding-bottom: 0; }
+  .timeline-dot {
+    width: 58px; height: 58px; border-radius: 50%;
+    background: var(--white); border: 2px solid var(--red);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(192,57,43,.15);
+    position: relative; z-index: 1;
+  }
+  .timeline-content { padding-top: 12px; }
+  .timeline-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+    text-transform: uppercase; color: var(--red);
+    margin-bottom: 8px;
+  }
+  .timeline-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 700; color: var(--ink);
+    margin-bottom: 12px; line-height: 1.2;
+  }
+  .timeline-text {
+    font-size: 16px; color: var(--ink-mid);
+    line-height: 1.8;
+  }
+  .timeline-text p { margin-bottom: 12px; }
+  .timeline-text p:last-child { margin-bottom: 0; }
+  .timeline-highlight {
+    margin-top: 16px; padding: 16px 20px;
+    background: var(--red-light); border-left: 3px solid var(--red);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 15px; color: var(--red); font-style: italic; line-height: 1.6;
+    font-family: 'Playfair Display', serif;
+  }
+  .name-origin {
+    margin-top: 48px; padding: 32px 36px;
+    background: var(--white); border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px;
+    text-align: center;
+  }
+  .name-part { }
+  .name-word {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px; font-weight: 900; color: var(--red);
+    margin-bottom: 6px;
+  }
+  .name-meaning { font-size: 13px; color: var(--ink-mid); line-height: 1.5; }
+  .founder-sign {
+    margin-top: 48px; padding: 28px 32px;
+    background: var(--ink); border-radius: var(--radius-lg);
+    display: flex; align-items: center; gap: 24px;
+  }
+  .founder-avatar {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--red) 0%, #E74C3C 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; flex-shrink: 0;
+  }
+  .founder-sign-text { }
+  .founder-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px; font-style: italic;
+    color: rgba(255,255,255,.9); margin-bottom: 8px; line-height: 1.5;
+  }
+  .founder-name { font-size: 13px; color: rgba(255,255,255,.5); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding-top: 90px; }
+    .hero-right { order: -1; }
+    .story-grid { grid-template-columns: 1fr; }
+    .story-visual { aspect-ratio: 2/1; }
+    .ingredients-grid { grid-template-columns: repeat(2,1fr); }
+    .tiers-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .cert-row { grid-template-columns: 1fr; }
+    .founder-timeline::before { left: 22px; }
+    .timeline-item { grid-template-columns: 48px 1fr; gap: 16px; }
+    .timeline-dot { width: 46px; height: 46px; font-size: 20px; }
+    .name-origin { grid-template-columns: 1fr; gap: 16px; }
+    .founder-sign { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Jamela<span>.</span></div>
+  <div class="nav-links">
+    <a href="#story" data-i18n="nav.story">Our Story</a>
+    <a href="#founder" data-i18n="nav.founder">The Journey</a>
+    <a href="#product" data-i18n="nav.product">The Jam</a>
+    <a href="#tiers" data-i18n="nav.tiers">Support Us</a>
+    <a href="#faq" data-i18n="nav.faq">FAQ</a>
+  </div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('vi')">VI</button>
+    <button class="lang-btn" onclick="setLang('ko')">한국어</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-left">
+    <div class="hero-badge" data-i18n="hero.badge">Crowdfunding Campaign — Open Now</div>
+    <h1 data-i18n="hero.headline">The jam that <em>saves fruit.</em></h1>
+    <p class="hero-sub" data-i18n="hero.subheadline">Every year, 30% of Binh Thuan's dragon fruit harvest is discarded — too small, too curved, not pretty enough for export. We turn it into something beautiful.</p>
+    <div class="hero-ctas">
+      <button class="btn-primary" onclick="scrollToTiers()" data-i18n="hero.cta_primary">Back Jamela</button>
+      <button class="btn-secondary" onclick="scrollToStory()" data-i18n="hero.cta_secondary">Watch our story</button>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="progress-card">
+      <div class="progress-header">
+        <div>
+          <div class="amount-raised" id="amount-display">$1,240</div>
+          <div class="amount-goal" data-i18n="hero.goal_label">Goal: <strong>$10,000</strong></div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:28px;font-weight:700;color:var(--ink)" id="pct-display">12%</div>
+          <div style="font-size:12px;color:var(--ink-soft)">funded</div>
+        </div>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+      <div class="progress-stats">
+        <div class="stat-item">
+          <span class="stat-num" id="stat-raised">$1,240</span>
+          <span class="stat-lbl" data-i18n="hero.raised_label">raised</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">47</span>
+          <span class="stat-lbl" data-i18n="hero.backers_label">backers</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" id="days-left">38</span>
+          <span class="stat-lbl" data-i18n="hero.days_label">days left</span>
+        </div>
+      </div>
+      <button class="pledge-btn" onclick="scrollToTiers()" data-i18n="hero.cta_primary">Back Jamela</button>
+      <div class="trust-row">
+        <span>🔒 Secure payment</span>
+        <span>✓ Full refund if goal not met</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="story-section" id="story">
+  <div class="story-grid">
+    <div class="story-visual">
+      <div class="story-emoji">🫙</div>
+      <div class="story-visual-text">From rescued fruit<br>to your table</div>
+      <div style="position:absolute;bottom:0;left:0;right:0;height:40%;background:linear-gradient(0deg,rgba(0,0,0,.3),transparent)"></div>
+    </div>
+    <div class="story-text">
+      <div class="section-badge" data-i18n="story.badge">Why Jamela exists</div>
+      <h2 class="section-title" data-i18n="story.headline">Perfect fruit for export.<br>The rest — wasted.</h2>
+      <p data-i18n="story.p1">Binh Thuan province in Vietnam is the world's largest dragon fruit growing region. Every harvest, farmers sort their fruit by strict export standards.</p>
+      <p data-i18n="story.p2">The remaining 30% — sweet, nutritious, absolutely delicious — gets sent to local markets or fed to livestock. Hundreds of thousands of tonnes per season.</p>
+      <p data-i18n="story.p3">After 8 months of R&D, we found the answer: a clean label dragon fruit jam with no refined sugar, no preservatives, and no compromise on taste.</p>
+      <div class="story-stats">
+        <div class="story-stat">
+          <span class="story-stat-num" data-i18n="story.stat1_number">30%</span>
+          <div class="story-stat-lbl" data-i18n="story.stat1_label">of harvest discarded</div>
+        </div>
+        <div class="story-stat">
+          <span class="story-stat-num" data-i18n="story.stat2_number">8 mo</span>
+          <div class="story-stat-lbl" data-i18n="story.stat2_label">of R&D</div>
+        </div>
+        <div class="story-stat">
+          <span class="story-stat-num" data-i18n="story.stat3_number">0</span>
+          <div class="story-stat-lbl" data-i18n="story.stat3_label">refined sugar</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER STORY -->
+<section class="founder-section" id="founder">
+  <div class="founder-inner">
+    <div class="founder-header">
+      <div class="section-badge" data-i18n="founder.badge">The Jamela Story</div>
+      <h2 class="section-title" data-i18n="founder.headline">From a childhood memory<br>to a jar of purpose.</h2>
+    </div>
+
+    <div class="founder-timeline">
+
+      <!-- Chapter 1 -->
+      <div class="timeline-item">
+        <div class="timeline-dot">🌅</div>
+        <div class="timeline-content">
+          <div class="timeline-label" data-i18n="founder.ch1_label">A Memory That Never Left</div>
+          <div class="timeline-title" data-i18n="founder.ch1_title">The white sands of Binh Thuan, and one fruit that changed everything.</div>
+          <div class="timeline-text">
+            <p data-i18n="founder.ch1_p1">My first memory of Binh Thuan was a family pilgrimage to Dinh Thay Thim — a sacred temple in the old land of scorching white sand and ocean wind. The heat was relentless. And then, someone handed me a dragon fruit, freshly cut under the open sky.</p>
+            <p data-i18n="founder.ch1_p2">In that moment, every drop of that fruit made the heat disappear. Cool, sweet, and somehow deeply Vietnamese. I was just a child, but I never forgot it. Along the roadsides, mountains of dragon fruit were stacked beside the fields — selling for as little as 500 to 3,000 VND per kilo. Beautiful, abundant, and almost given away.</p>
+          </div>
+          <div class="timeline-highlight" data-i18n="founder.ch1_highlight">"Under that burning sun, one bite of dragon fruit made the heat disappear. I never forgot that feeling."</div>
+        </div>
+      </div>
+
+      <!-- Chapter 2 -->
+      <div class="timeline-item">
+        <div class="timeline-dot">💡</div>
+        <div class="timeline-content">
+          <div class="timeline-label" data-i18n="founder.ch2_label">The Moment Everything Changed</div>
+          <div class="timeline-title" data-i18n="founder.ch2_title">2024. Phan Thiet. A mountain of fruit — and one question.</div>
+          <div class="timeline-text">
+            <p data-i18n="founder.ch2_p1">In 2024–2025, work brought me back to Binh Thuan — to Phan Thiet, Ham Thuan Bac and Nam, Mui Ke Ga, and La Gi. And there they were again: thousands of dragon fruits stacked into mountains beside the fields. I walked over and asked the farmers.</p>
+            <p data-i18n="founder.ch2_p2">They told me these were the rejects — bruised skin, uneven shape, too small for export standards. Traders would come and take some for local markets. The rest? Left to rot, or fed to cattle. Hundreds of thousands of tonnes every season. Agricultural waste — from fruit that was still sweet, still nutritious, still delicious.</p>
+          </div>
+          <div class="timeline-highlight" data-i18n="founder.ch2_highlight">"Why? A single word that launched a crazy idea: turn something thrown away into something of real value."</div>
+        </div>
+      </div>
+
+      <!-- Chapter 3 -->
+      <div class="timeline-item">
+        <div class="timeline-dot">🔥</div>
+        <div class="timeline-content">
+          <div class="timeline-label" data-i18n="founder.ch3_label">8 Months of Beautiful Failure</div>
+          <div class="timeline-title" data-i18n="founder.ch3_title">Burnt batches. Sleepless nights. And a lot of jam poured down the drain.</div>
+          <div class="timeline-text">
+            <p data-i18n="founder.ch3_p1">The R&D process was not glamorous. Batch after batch was thrown away — burnt when I fell asleep monitoring the temperature, too runny, too thick, the wrong balance of sweetness. I once calculated that the amount I wasted was enough to buy a brand-new SH 350i motorcycle.</p>
+            <p data-i18n="founder.ch3_p2">There were moments when friends tasted early versions and gave honest, brutal feedback. We thought we had it — and then we didn't. There were nights of real doubt: had we chosen the wrong path entirely? But something stubborn kept us going. The vision was too clear to abandon.</p>
+            <p data-i18n="founder.ch3_p3">After conversations with friends in La Gi and months of trial and error, the answer finally came: remove the refined sugar entirely and replace it with fresh sugarcane molasses. Remove the industrial additives and replace them with green apple and fresh lemon juice. Let the fruit speak for itself, at the right temperature, by hand.</p>
+          </div>
+          <div class="timeline-highlight" data-i18n="founder.ch3_highlight">"I don't know how many batches I threw away. But I refused to give up — because the fruit deserved better."</div>
+        </div>
+      </div>
+
+      <!-- Chapter 4 -->
+      <div class="timeline-item">
+        <div class="timeline-dot">🫙</div>
+        <div class="timeline-content">
+          <div class="timeline-label" data-i18n="founder.ch4_label">Jamela Is Born</div>
+          <div class="timeline-title" data-i18n="founder.ch4_title">The first perfect jar. And a name that means beautiful.</div>
+          <div class="timeline-text">
+            <p data-i18n="founder.ch4_p1">The result: a 100% natural dragon fruit jam. Four ingredients. No compromise. And a name to carry its story forward.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Name origin -->
+    <div class="name-origin">
+      <div class="name-part">
+        <div class="name-word">JAM</div>
+        <div class="name-meaning" data-i18n="founder.name_jam">Mứt — the product itself. Sweet, honest, made by hand.</div>
+      </div>
+      <div class="name-part">
+        <div class="name-word" style="color:var(--green)">ELA</div>
+        <div class="name-meaning" data-i18n="founder.name_ela">Ê La Gi — the coastal town where the recipe finally came together.</div>
+      </div>
+      <div class="name-part">
+        <div class="name-word" style="color:var(--gold)">BELLA</div>
+        <div class="name-meaning" data-i18n="founder.name_bella">Beautiful in Arabic & Italian. Because beauty can come from what others discard.</div>
+      </div>
+    </div>
+
+    <!-- Founder sign-off -->
+    <div class="founder-sign">
+      <div class="founder-avatar">🌱</div>
+      <div class="founder-sign-text">
+        <div class="founder-quote" data-i18n="founder.signoff_quote">"As a founder, I hope Jamela becomes more than a jam — it becomes proof that Vietnamese agriculture can create products of real world-class value."</div>
+        <div class="founder-name" data-i18n="founder.signoff_name">— Founder, Jamela Vietnam · Binh Thuan, 2025</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- INGREDIENTS -->
+<section class="ingredients-section" id="product">
+  <div class="section-badge" data-i18n="product.badge">What's inside</div>
+  <h2 class="section-title" data-i18n="product.headline">Four ingredients. That's it.</h2>
+  <div class="ingredients-grid">
+    <div class="ingredient-card">
+      <span class="ingredient-emoji">🐉</span>
+      <div class="ingredient-name" data-i18n="product.ingredient1_name">Red dragon fruit</div>
+      <div class="ingredient-desc" data-i18n="product.ingredient1_desc">Grade-B from Binh Thuan farms. Peeled, deseeded, slow-cooked.</div>
+    </div>
+    <div class="ingredient-card">
+      <span class="ingredient-emoji">🎋</span>
+      <div class="ingredient-name" data-i18n="product.ingredient2_name">Sugarcane molasses</div>
+      <div class="ingredient-desc" data-i18n="product.ingredient2_desc">Pressed from fresh sugarcane and reduced. Natural sweetness, low GI.</div>
+    </div>
+    <div class="ingredient-card">
+      <span class="ingredient-emoji">🍏</span>
+      <div class="ingredient-name" data-i18n="product.ingredient3_name">Green apple</div>
+      <div class="ingredient-desc" data-i18n="product.ingredient3_desc">Natural pectin source. Gives the jam its perfect set without additives.</div>
+    </div>
+    <div class="ingredient-card">
+      <span class="ingredient-emoji">🍋</span>
+      <div class="ingredient-name" data-i18n="product.ingredient4_name">Fresh lemon juice</div>
+      <div class="ingredient-desc" data-i18n="product.ingredient4_desc">Brightness, balance, and natural preservation.</div>
+    </div>
+  </div>
+  <div class="cert-row">
+    <div class="cert-item"><div class="cert-dot cert-done"></div><span data-i18n="product.cert1">Vietnam Food Safety (ATTP) — completed</span></div>
+    <div class="cert-item"><div class="cert-dot cert-done"></div><span data-i18n="product.cert2">Nutrition Facts panel — completed</span></div>
+    <div class="cert-item"><div class="cert-dot cert-pending"></div><span data-i18n="product.cert3">FDA registration — funding target</span></div>
+    <div class="cert-item"><div class="cert-dot cert-pending"></div><span data-i18n="product.cert4">EU food import compliance — stretch goal</span></div>
+  </div>
+</section>
+
+<!-- TIERS -->
+<section class="tiers-section" id="tiers">
+  <div class="section-badge" data-i18n="tiers.badge">Choose your support level</div>
+  <h2 class="section-title" data-i18n="tiers.headline">Back Jamela. Get the first jars.</h2>
+  <p class="section-sub" data-i18n="tiers.subheadline">All rewards ship after our FDA registration. We send farm updates every two weeks.</p>
+  <div class="tiers-grid">
+    <div class="tier-card">
+      <div class="tier-name" data-i18n="tiers.tier1.name">Early Supporter</div>
+      <div class="tier-price" data-i18n="tiers.tier1.price">$25</div>
+      <div class="tier-limit" data-i18n="tiers.tier1.limit">Limited to 200</div>
+      <div class="tier-divider"></div>
+      <ul class="tier-items" id="tier1-items"></ul>
+      <div class="tier-eta" data-i18n="tiers.tier1.eta">Estimated delivery: Q3 2026</div>
+      <button class="tier-btn" onclick="openPayment('tier1')" data-i18n="tiers.tier1.cta">Back at $25</button>
+    </div>
+    <div class="tier-card popular">
+      <div class="popular-badge" data-i18n="tiers.popular_label">Most popular</div>
+      <div class="tier-name" data-i18n="tiers.tier2.name">Farm Friend</div>
+      <div class="tier-price" data-i18n="tiers.tier2.price">$75</div>
+      <div class="tier-limit" data-i18n="tiers.tier2.limit">Limited to 100</div>
+      <div class="tier-divider"></div>
+      <ul class="tier-items" id="tier2-items"></ul>
+      <div class="tier-eta" data-i18n="tiers.tier2.eta">Estimated delivery: Q3 2026</div>
+      <button class="tier-btn" onclick="openPayment('tier2')" data-i18n="tiers.tier2.cta">Back at $75</button>
+    </div>
+    <div class="tier-card">
+      <div class="tier-name" data-i18n="tiers.tier3.name">Zero-Waste Champion</div>
+      <div class="tier-price" data-i18n="tiers.tier3.price">$150</div>
+      <div class="tier-limit" data-i18n="tiers.tier3.limit">Limited to 30</div>
+      <div class="tier-divider"></div>
+      <ul class="tier-items" id="tier3-items"></ul>
+      <div class="tier-eta" data-i18n="tiers.tier3.eta">Estimated delivery: Q3 2026</div>
+      <button class="tier-btn" onclick="openPayment('tier3')" data-i18n="tiers.tier3.cta">Become a Champion</button>
+    </div>
+  </div>
+</section>
+
+<!-- BUDGET -->
+<section class="budget-section" id="budget">
+  <div class="section-badge" data-i18n="budget.badge">Where your money goes</div>
+  <h2 class="section-title" data-i18n="budget.headline">100% transparent. No vague line items.</h2>
+  <div class="budget-bars">
+    <div class="budget-item">
+      <div class="budget-label-row">
+        <span class="budget-label" data-i18n="budget.item1_label">Food safety certifications & lab testing</span>
+        <span class="budget-amount" data-i18n="budget.item1_amount">$3,500</span>
+      </div>
+      <div class="budget-track"><div class="budget-fill" style="width:35%"></div></div>
+      <div class="budget-desc" data-i18n="budget.item1_desc">ATTP international, microbiology testing — foundation for FDA</div>
+    </div>
+    <div class="budget-item">
+      <div class="budget-label-row">
+        <span class="budget-label" data-i18n="budget.item2_label">Production — first reward batch</span>
+        <span class="budget-amount" data-i18n="budget.item2_amount">$2,500</span>
+      </div>
+      <div class="budget-track"><div class="budget-fill" style="width:25%"></div></div>
+      <div class="budget-desc" data-i18n="budget.item2_desc">Ingredients, Jamela-branded jars, export-ready packaging</div>
+    </div>
+    <div class="budget-item">
+      <div class="budget-label-row">
+        <span class="budget-label" data-i18n="budget.item3_label">Logistics — Vietnam to US hub to you</span>
+        <span class="budget-amount" data-i18n="budget.item3_amount">$2,000</span>
+      </div>
+      <div class="budget-track"><div class="budget-fill" style="width:20%"></div></div>
+      <div class="budget-desc" data-i18n="budget.item3_desc">International freight + domestic US distribution</div>
+    </div>
+    <div class="budget-item">
+      <div class="budget-label-row">
+        <span class="budget-label" data-i18n="budget.item4_label">Packaging design & brand identity</span>
+        <span class="budget-amount" data-i18n="budget.item4_amount">$1,200</span>
+      </div>
+      <div class="budget-track"><div class="budget-fill" style="width:12%"></div></div>
+      <div class="budget-desc" data-i18n="budget.item4_desc">FDA-format label design, export-ready packaging</div>
+    </div>
+    <div class="budget-item">
+      <div class="budget-label-row">
+        <span class="budget-label" data-i18n="budget.item5_label">Campaign operations & contingency</span>
+        <span class="budget-amount" data-i18n="budget.item5_amount">$800</span>
+      </div>
+      <div class="budget-track"><div class="budget-fill" style="width:8%"></div></div>
+      <div class="budget-desc" data-i18n="budget.item5_desc">Payment processing, hosting, unexpected costs</div>
+    </div>
+  </div>
+  <div class="stretch-box">
+    <div class="stretch-label" data-i18n="budget.stretch_label">Stretch goal — $25,000</div>
+    <div class="stretch-amount">$25,000</div>
+    <div class="stretch-desc" data-i18n="budget.stretch_desc">Unlocks FDA registration + limited Gift Box edition + your name on our official website.</div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="section-badge" data-i18n="faq.badge">Questions</div>
+  <h2 class="section-title" data-i18n="faq.headline">Frequently asked</h2>
+  <div class="faq-grid" id="faq-container"></div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">Jamela.</div>
+    <div class="footer-tagline" data-i18n="footer.tagline">Made from rescued fruit. Made with care.</div>
+  </div>
+  <div class="footer-links">
+    <a href="mailto:hello@jamelavietnam.com" data-i18n="footer.contact">hello@jamelavietnam.com</a>
+    <span data-i18n="footer.rights">© 2025 Jamela</span>
+  </div>
+</footer>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-overlay" id="payment-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closePayment()">✕</button>
+    <div class="modal-tier-name" id="modal-tier-name"></div>
+    <div class="modal-title" id="modal-title"></div>
+
+    <div class="payment-tabs" id="payment-tabs">
+      <button class="pay-tab active" id="tab-paddle" onclick="switchTab('paddle')">💳 Card (USD)</button>
+      <button class="pay-tab" id="tab-sepay" onclick="switchTab('sepay')">📱 QR / Banking</button>
+    </div>
+
+    <div class="pay-panel active" id="panel-paddle">
+      <div class="form-group">
+        <label class="form-label">Full name</label>
+        <input class="form-input" type="text" placeholder="Your name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email address</label>
+        <input class="form-input" type="email" placeholder="you@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Shipping country</label>
+        <input class="form-input" type="text" placeholder="United States, Korea, ...">
+      </div>
+      <button class="pay-confirm" id="paddle-confirm">Continue to secure checkout →</button>
+      <div class="pay-secure">🔒 Secured by Paddle — your card is never stored</div>
+    </div>
+
+    <div class="pay-panel" id="panel-sepay">
+      <div class="qr-box">
+        <div class="qr-placeholder">
+          <span class="qr-icon">⬛</span>
+          <span>QR sẽ hiển thị tại đây<br>khi tích hợp SePay API</span>
+        </div>
+        <div class="qr-amount" id="sepay-amount">580.000 VND</div>
+        <div class="qr-bank">Quét bằng bất kỳ ứng dụng ngân hàng nào</div>
+      </div>
+      <div class="bank-info">
+        <div class="bank-row"><span>Ngân hàng</span><span>Techcombank</span></div>
+        <div class="bank-row"><span>Số tài khoản</span><span>••••••••••</span></div>
+        <div class="bank-row"><span>Tên tài khoản</span><span>JAMELA VIETNAM</span></div>
+        <div class="bank-row"><span>Nội dung CK</span><span id="transfer-ref">JAMELA-T1-[EMAIL]</span></div>
+      </div>
+      <p style="font-size:12px;color:var(--ink-soft);margin-top:12px;text-align:center">Sau khi chuyển khoản, hệ thống SePay tự động xác nhận trong 1–2 phút</p>
+    </div>
+  </div>
+</div>
+
+<!-- THANK YOU OVERLAY -->
+<div class="thankyou-overlay" id="thankyou">
+  <div class="ty-emoji">🫙</div>
+  <h2 class="ty-title" data-i18n="upsell.headline">Thank you for backing Jamela!</h2>
+  <p class="ty-sub" data-i18n="upsell.subheadline">One more thing — would you like to send Jamela to someone you love?</p>
+  <div class="upsell-box">
+    <div class="upsell-title" data-i18n="upsell.gift_box_title">Gift Box — Add for $15</div>
+    <div class="upsell-desc" data-i18n="upsell.gift_box_desc">One extra jar in a gift-ready box with a handwritten note from our farm.</div>
+    <div class="upsell-btns">
+      <button class="btn-upsell-yes" data-i18n="upsell.gift_box_cta">Yes, add a gift jar</button>
+      <button class="btn-upsell-no" onclick="closeThankyou()" data-i18n="upsell.skip">No thanks, continue</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── i18n DATA ──
+const translations = {
+  en: {
+    meta:{title:"Jamela — Dragon Fruit Jam from Vietnam's Heart"},
+    nav:{story:"Our Story",founder:"The Journey",product:"The Jam",tiers:"Support Us",faq:"FAQ"},
+    hero:{badge:"Crowdfunding Campaign — Open Now",headline:"The jam that saves fruit.",subheadline:"Every year, 30% of Binh Thuan's dragon fruit harvest is discarded — too small, too curved, not pretty enough for export. We turn it into something beautiful.",cta_primary:"Back Jamela",cta_secondary:"Watch our story",goal_label:"Goal",raised_label:"raised",backers_label:"backers",days_label:"days left"},
+    story:{badge:"Why Jamela exists",headline:"Perfect fruit for export. The rest — wasted.",p1:"Binh Thuan province in Vietnam is the world's largest dragon fruit growing region. Every harvest, farmers sort their fruit by strict export standards: only perfectly round, blemish-free, regulation-weight fruit makes the cut.",p2:"The remaining 30% — sweet, nutritious, absolutely delicious — gets sent to local markets or fed to livestock. Hundreds of thousands of tonnes per season. Agricultural waste that didn't have to be.",p3:"After 8 months of R&D, we found the answer: a clean label dragon fruit jam made entirely from this Grade-B fruit, with no refined sugar, no preservatives, and no compromise on taste.",stat1_number:"30%",stat1_label:"of harvest discarded each season",stat2_number:"8 mo",stat2_label:"of R&D to perfect the recipe",stat3_number:"0",stat3_label:"refined sugar or additives"},
+    product:{badge:"What's inside",headline:"Four ingredients. That's it.",ingredient1_name:"Red dragon fruit",ingredient1_desc:"Grade-B from Binh Thuan farms. Peeled, deseeded, slow-cooked.",ingredient2_name:"Sugarcane molasses",ingredient2_desc:"Pressed from fresh sugarcane and reduced. Natural sweetness, low GI.",ingredient3_name:"Green apple",ingredient3_desc:"Natural pectin source. Gives the jam its perfect set without additives.",ingredient4_name:"Fresh lemon juice",ingredient4_desc:"Brightness, balance, and natural preservation.",cert1:"Vietnam Food Safety (ATTP) — completed",cert2:"Nutrition Facts panel — completed",cert3:"FDA registration — funding target",cert4:"EU food import compliance — stretch goal"},
+    tiers:{badge:"Choose your support level",headline:"Back Jamela. Get the first jars.",subheadline:"All rewards ship after our FDA registration. We send farm updates every two weeks.",popular_label:"Most popular",tier1:{name:"Early Supporter",price:"$25",limit:"Limited to 200",items:["1 jar of Jamela (200g)","Handwritten postcard from Binh Thuan","Name on our founding backers list"],eta:"Estimated delivery: Q3 2026",cta:"Back at $25"},tier2:{name:"Farm Friend",price:"$75",limit:"Limited to 100",items:["3 jars of Jamela (200g each)","Farm Story Booklet — printed, not digital","Certificate of Support (signed)","Early access when we go commercial"],eta:"Estimated delivery: Q3 2026",cta:"Back at $75"},tier3:{name:"Zero-Waste Champion",price:"$150",limit:"Limited to 30",items:["6 jars of Jamela (200g each)","Your name printed on every label","15-min video call with the founder","Lifetime 15% discount on all future orders"],eta:"Estimated delivery: Q3 2026",cta:"Become a Champion"}},
+    budget:{badge:"Where your money goes",headline:"100% transparent. No vague line items.",item1_label:"Food safety certifications & lab testing",item1_amount:"$3,500",item1_desc:"ATTP international, microbiology testing — foundation for FDA",item2_label:"Production — first reward batch",item2_amount:"$2,500",item2_desc:"Ingredients, Jamela-branded jars, export-ready packaging",item3_label:"Logistics — Vietnam to US hub to you",item3_amount:"$2,000",item3_desc:"International freight + domestic US distribution via our partner",item4_label:"Packaging design & brand identity",item4_amount:"$1,200",item4_desc:"FDA-format label design, export-ready packaging",item5_label:"Campaign operations & contingency",item5_amount:"$800",item5_desc:"Payment processing, hosting, unexpected costs",stretch_label:"Stretch goal — $25,000",stretch_desc:"Unlocks FDA registration + limited Gift Box edition + your name on our official website."},
+    faq:{badge:"Questions",headline:"Frequently asked",items:[{q:"When will I receive my reward?",a:"We estimate Q3 2026. Rewards ship after our FDA registration and first production batch are complete. We'll send farm updates every two weeks."},{q:"Is this a donation or a purchase?",a:"This is a reward-based crowdfunding campaign. You're pre-ordering Jamela at a founding backer price. You will receive physical jars."},{q:"Who handles payments and shipping to the US?",a:"Payments are processed securely through Paddle. US distribution is handled by our American partner company, who ships domestically for faster delivery."},{q:"What if you don't reach your goal?",a:"If we don't reach $10,000, all backers receive a full refund. No risk to you."},{q:"Is Jamela actually healthy?",a:"No refined sugar. No pectin additives. No preservatives. The only sweetener is reduced sugarcane juice with a lower GI than white sugar."},{q:"Why dragon fruit specifically?",a:"Red-fleshed dragon fruit from Binh Thuan is rich in antioxidants, betalains, and dietary fibre — and tastes completely different from the white variety."},{q:"Can I get a refund?",a:"You may request a refund within 14 days of pledging, before production begins."},{q:"How do I follow progress?",a:"Every backer receives bi-weekly email updates from our farm — photos from the orchard, factory, and packaging process."}]},
+    upsell:{headline:"Thank you for backing Jamela!",subheadline:"One more thing — would you like to send Jamela to someone you love?",gift_box_title:"Gift Box — Add for $15",gift_box_desc:"One extra jar in a gift-ready box with a handwritten note from our farm.",gift_box_cta:"Yes, add a gift jar",skip:"No thanks, continue"},
+    footer:{tagline:"Made from rescued fruit. Made with care.",contact:"hello@jamelavietnam.com",rights:"© 2025 Jamela. All rights reserved."},
+    founder:{badge:"The Jamela Story",headline:"From a childhood memory\nto a jar of purpose.",ch1_label:"A Memory That Never Left",ch1_title:"The white sands of Binh Thuan, and one fruit that changed everything.",ch1_p1:"My first memory of Binh Thuan was a family pilgrimage to Dinh Thay Thim — a sacred temple in the old land of scorching white sand and ocean wind. The heat was relentless. And then, someone handed me a dragon fruit, freshly cut under the open sky.",ch1_p2:"In that moment, every drop of that fruit made the heat disappear. Cool, sweet, and somehow deeply Vietnamese. Along the roadsides, mountains of dragon fruit were stacked beside the fields — selling for as little as 500 to 3,000 VND per kilo. Beautiful, abundant, and almost given away.",ch1_highlight:'"Under that burning sun, one bite of dragon fruit made the heat disappear. I never forgot that feeling."',ch2_label:"The Moment Everything Changed",ch2_title:"2024. Phan Thiet. A mountain of fruit — and one question.",ch2_p1:"In 2024–2025, work brought me back to Binh Thuan — to Phan Thiet, Ham Thuan Bac and Nam, Mui Ke Ga, and La Gi. And there they were again: thousands of dragon fruits stacked into mountains beside the fields. I walked over and asked the farmers.",ch2_p2:"They told me these were the rejects — bruised skin, uneven shape, too small for export. Traders would come and take some for local markets. The rest? Left to rot, or fed to cattle. Hundreds of thousands of tonnes every season. Waste — from fruit that was still sweet, still nutritious, still delicious.",ch2_highlight:'"Why? A single word that launched a crazy idea: turn something thrown away into something of real value."',ch3_label:"8 Months of Beautiful Failure",ch3_title:"Burnt batches. Sleepless nights. And a lot of jam poured down the drain.",ch3_p1:"The R&D process was not glamorous. Batch after batch was thrown away — burnt when I fell asleep monitoring the temperature, too runny, too thick. I once calculated that the amount I wasted was enough to buy a brand-new SH 350i motorcycle.",ch3_p2:"There were moments when friends tasted early versions and gave honest, brutal feedback. There were nights of real doubt: had we chosen the wrong path entirely? But something stubborn kept us going.",ch3_p3:"After conversations with friends in La Gi and months of trial and error, the answer finally came: remove the refined sugar, replace with fresh sugarcane molasses. Remove the additives, replace with green apple and fresh lemon juice. Let the fruit speak for itself.",ch3_highlight:'"I don\'t know how many batches I threw away. But I refused to give up — because the fruit deserved better."',ch4_label:"Jamela Is Born",ch4_title:"The first perfect jar. And a name that means beautiful.",ch4_p1:"The result: a 100% natural dragon fruit jam. Four ingredients. No compromise. And a name to carry its story forward.",name_jam:"Mứt — the product itself. Sweet, honest, made by hand.",name_ela:"Ê La Gi — the coastal town where the recipe finally came together.",name_bella:"Beautiful in Arabic & Italian. Because beauty can come from what others discard.",signoff_quote:'"As a founder, I hope Jamela becomes more than a jam — proof that Vietnamese agriculture can create world-class value."',signoff_name:"— Founder, Jamela Vietnam · Binh Thuan, 2025"}
+  },
+  vi: {
+    meta:{title:"Jamela — Mứt Thanh Long từ Trái Tim Việt Nam"},
+    nav:{story:"Câu chuyện",founder:"Hành trình",product:"Sản phẩm",tiers:"Ủng hộ",faq:"Hỏi đáp"},
+    hero:{badge:"Chiến dịch Crowdfunding — Đang mở",headline:"Mứt từ những quả bị bỏ quên.",subheadline:"Mỗi năm, 30% sản lượng thanh long Bình Thuận bị loại ra — quả nhỏ, quả méo, không đủ tiêu chuẩn xuất khẩu. Chúng tôi biến chúng thành điều gì đó thực sự có giá trị.",cta_primary:"Ủng hộ Jamela",cta_secondary:"Xem câu chuyện",goal_label:"Mục tiêu",raised_label:"đã huy động",backers_label:"người ủng hộ",days_label:"ngày còn lại"},
+    story:{badge:"Tại sao Jamela ra đời",headline:"Quả đẹp cho xuất khẩu. Phần còn lại — bị bỏ đi.",p1:"Bình Thuận là thủ phủ thanh long lớn nhất thế giới. Mỗi vụ thu hoạch, nông dân phân loại quả theo tiêu chuẩn xuất khẩu nghiêm ngặt: chỉ những quả tròn đều, không tì vết mới được chọn.",p2:"30% còn lại — ngọt ngào, đầy dinh dưỡng, hoàn toàn ăn được — bị đẩy ra chợ nông sản hoặc cho gia súc ăn. Hàng trăm nghìn tấn mỗi vụ. Rác thải nông nghiệp không đáng có.",p3:"Sau 8 tháng nghiên cứu và phát triển, chúng tôi tìm ra câu trả lời: mứt thanh long ruột đỏ clean label không đường tinh luyện, không chất bảo quản, và không thỏa hiệp về hương vị.",stat1_number:"30%",stat1_label:"sản lượng bị loại mỗi vụ",stat2_number:"8 tháng",stat2_label:"nghiên cứu & phát triển",stat3_number:"0",stat3_label:"đường tinh luyện hay phụ gia"},
+    product:{badge:"Thành phần",headline:"Bốn nguyên liệu. Chỉ vậy thôi.",ingredient1_name:"Thanh long ruột đỏ",ingredient1_desc:"Quả loại B từ vườn Bình Thuận. Tách vỏ, tách hạt, gia nhiệt chậm.",ingredient2_name:"Mật mía tự nhiên",ingredient2_desc:"Cô đặc từ nước mía tươi ép. Vị ngọt tự nhiên, chỉ số GI thấp.",ingredient3_name:"Táo xanh",ingredient3_desc:"Nguồn pectin tự nhiên. Tạo độ đông cho mứt mà không cần phụ gia.",ingredient4_name:"Nước cốt chanh tươi",ingredient4_desc:"Cân bằng vị, tạo độ sáng và bảo quản tự nhiên.",cert1:"An toàn thực phẩm Việt Nam (ATTP) — hoàn thành",cert2:"Bảng thành phần dinh dưỡng — hoàn thành",cert3:"Đăng ký FDA Mỹ — mục tiêu huy động vốn",cert4:"Tiêu chuẩn nhập khẩu EU — stretch goal"},
+    tiers:{badge:"Chọn mức ủng hộ",headline:"Ủng hộ Jamela. Nhận những hũ đầu tiên.",subheadline:"Tất cả phần thưởng sẽ được giao sau khi hoàn thành đăng ký FDA. Chúng tôi gửi cập nhật từ trang trại mỗi hai tuần.",popular_label:"Phổ biến nhất",tier1:{name:"Người ủng hộ sớm",price:"580.000đ",limit:"Giới hạn 200 suất",items:["1 hũ Jamela (200g)","Bưu thiếp viết tay từ Bình Thuận","Tên trong danh sách Founding Backers"],eta:"Dự kiến giao: Quý 3/2026",cta:"Ủng hộ 580.000đ"},tier2:{name:"Người bạn của trang trại",price:"1.750.000đ",limit:"Giới hạn 100 suất",items:["3 hũ Jamela (200g mỗi hũ)","Farm Story Booklet — in ấn, không phải file số","Giấy chứng nhận ủng hộ (có chữ ký)","Quyền mua sớm khi sản phẩm ra thị trường"],eta:"Dự kiến giao: Quý 3/2026",cta:"Ủng hộ 1.750.000đ"},tier3:{name:"Nhà vô địch Zero-Waste",price:"3.500.000đ",limit:"Giới hạn 30 suất",items:["6 hũ Jamela (200g mỗi hũ)","Tên in trên nhãn — phiên bản Founding Backers","Video call 15 phút với người sáng lập","Giảm 15% vĩnh viễn cho tất cả đơn hàng"],eta:"Dự kiến giao: Quý 3/2026",cta:"Trở thành Champion"}},
+    budget:{badge:"Tiền được dùng cho gì",headline:"Minh bạch 100%. Không có hạng mục mơ hồ.",item1_label:"Chứng nhận an toàn thực phẩm & kiểm nghiệm",item1_amount:"3.500 USD",item1_desc:"ATTP quốc tế, kiểm nghiệm vi sinh — nền tảng cho FDA",item2_label:"Sản xuất lô reward đầu tiên",item2_amount:"2.500 USD",item2_desc:"Nguyên liệu, hũ thương hiệu Jamela, bao bì xuất khẩu",item3_label:"Logistics — VN → Hub Mỹ → Bạn",item3_amount:"2.000 USD",item3_desc:"Vận chuyển quốc tế + phân phối nội địa Mỹ qua đối tác",item4_label:"Thiết kế bao bì & nhận diện thương hiệu",item4_amount:"1.200 USD",item4_desc:"Nhãn đạt chuẩn FDA, bao bì xuất khẩu chuẩn quốc tế",item5_label:"Vận hành chiến dịch & dự phòng",item5_amount:"800 USD",item5_desc:"Phí thanh toán, hosting, chi phí phát sinh",stretch_label:"Stretch goal — 25.000 USD",stretch_desc:"Mở khóa đăng ký FDA + phiên bản Gift Box giới hạn + tên bạn trên website chính thức Jamela."},
+    faq:{badge:"Hỏi đáp",headline:"Câu hỏi thường gặp",items:[{q:"Khi nào tôi nhận được phần thưởng?",a:"Dự kiến Quý 3/2026. Phần thưởng giao sau khi hoàn thành đăng ký FDA và sản xuất lô đầu tiên. Chúng tôi gửi cập nhật từ trang trại mỗi hai tuần."},{q:"Đây là quyên góp hay mua hàng?",a:"Đây là chiến dịch crowdfunding dạng reward-based. Bạn đặt trước Jamela với giá founding backer. Bạn sẽ nhận hũ mứt thật."},{q:"Thanh toán và giao hàng được xử lý thế nào?",a:"Thanh toán nội địa qua SePay — quét QR hoặc chuyển khoản, tự động xác nhận trong 1–2 phút."},{q:"Nếu chiến dịch không đạt mục tiêu thì sao?",a:"Nếu không đạt 10.000 USD, tất cả backers được hoàn tiền 100%. Không có rủi ro cho bạn."},{q:"Jamela có thực sự healthy không?",a:"Không đường tinh luyện. Không pectin phụ gia. Không chất bảo quản. Chất tạo ngọt duy nhất là mật mía tự nhiên với chỉ số GI thấp hơn đường trắng."},{q:"Tại sao là thanh long ruột đỏ?",a:"Thanh long ruột đỏ Bình Thuận cực kỳ giàu chất chống oxy hóa, betalains và chất xơ. Hương vị đậm đà và màu sắc đẹp hơn nhiều so với thanh long ruột trắng."},{q:"Tôi có thể hoàn tiền không?",a:"Bạn có thể yêu cầu hoàn tiền trong vòng 14 ngày sau khi ủng hộ, trước khi bắt đầu sản xuất."},{q:"Làm sao tôi theo dõi tiến độ?",a:"Mỗi backer nhận email cập nhật hai tuần một lần từ trang trại — ảnh từ vườn, xưởng, quy trình đóng gói."}]},
+    upsell:{headline:"Cảm ơn bạn đã ủng hộ Jamela!",subheadline:"Thêm một điều nữa — bạn có muốn gửi Jamela đến người thân yêu không?",gift_box_title:"Hộp quà — Thêm 350.000đ",gift_box_desc:"Thêm 1 hũ trong hộp quà kèm tấm bưu thiếp viết tay từ trang trại.",gift_box_cta:"Thêm hũ quà tặng",skip:"Không, cảm ơn"},
+    footer:{tagline:"Làm từ quả được cứu. Làm bằng tình yêu.",contact:"hello@jamelavietnam.com",rights:"© 2025 Jamela. Bảo lưu mọi quyền."},
+    founder:{badge:"Câu chuyện Jamela",headline:"Từ ký ức tuổi thơ\nđến một hũ mứt có ý nghĩa.",ch1_label:"Ký Ức Không Bao Giờ Phai",ch1_title:"Cát trắng Bình Thuận, và một quả trái cây thay đổi tất cả.",ch1_p1:"Ký ức đầu tiên của tôi về Bình Thuận là chuyến hành hương cùng gia đình đến Dinh Thầy Thím — ngôi đền thiêng giữa miền cát trắng nóng bỏng và gió biển. Cái nắng khủng khiếp. Rồi ai đó đưa cho tôi một quả thanh long vừa bẻ dưới bầu trời mở.",ch1_p2:"Trong khoảnh khắc đó, từng giọt nước thanh long làm tan biến mọi cái nóng. Mát lạnh, ngọt ngào, và thuần Việt Nam theo một cách nào đó. Dọc ven đường, những núi thanh long chất cao bên cánh đồng — giá chỉ 500 đến 3.000 đồng mỗi ký. Đẹp, dồi dào, và gần như cho không.",ch1_highlight:'"Dưới cái nắng đốt da đó, một miếng thanh long làm tan biến mọi cái nóng. Tôi không bao giờ quên cảm giác ấy."',ch2_label:"Khoảnh Khắc Thay Đổi Tất Cả",ch2_title:"2024. Phan Thiết. Một núi quả — và một câu hỏi.",ch2_p1:"Năm 2024–2025, công việc đưa tôi trở lại Bình Thuận — Phan Thiết, Hàm Thuận Bắc, Hàm Thuận Nam, Mũi Kê Gà và La Gi. Và cảnh tượng đó lại hiện ra: hàng nghìn quả thanh long chất thành núi bên cánh đồng. Tôi bước lại hỏi thăm bà con nông dân.",ch2_p2:"Họ nói đây là loại dạt — nám da, quả méo, nhỏ hơn tiêu chuẩn xuất khẩu. Thương lái đến mua một phần đưa vào chợ. Phần còn lại? Bỏ thối, hoặc cho bò ăn. Hàng trăm nghìn tấn mỗi vụ. Rác nông sản — từ những quả vẫn còn ngọt, vẫn đủ dinh dưỡng, vẫn ăn được.",ch2_highlight:'"Why? Một từ duy nhất châm ngòi cho một ý tưởng điên rồ: biến thứ bị bỏ đi thành thứ có giá trị thật sự."',ch3_label:"8 Tháng Thất Bại Đẹp Đẽ",ch3_title:"Những mẻ cháy khét. Những đêm thức canh. Và rất nhiều hũ mứt đổ xuống cống.",ch3_p1:"Quá trình R&D không hề hào nhoáng. Mẻ này đến mẻ khác bị đổ bỏ — cháy khét khi ngủ quên lúc canh nhiệt, quá lỏng, quá đặc, sai tỷ lệ. Tôi từng tính toán lượng nguyên liệu hỏng đủ để mua một chiếc SH 350i.",ch3_p2:"Có những lần mang đi cho bạn bè thử và nhận về những phản hồi thật lòng, không nể nang. Có những đêm nghi ngờ thật sự: liệu mình có đang đi sai đường? Nhưng có cái gì đó cứng đầu không chịu bỏ cuộc.",ch3_p3:"Sau những cuộc trò chuyện với bạn bè ở La Gi và tháng tháng thử sai, câu trả lời cuối cùng cũng đến: loại bỏ đường trắng, thay bằng mật mía tươi. Loại bỏ phụ gia công nghiệp, thay bằng táo xanh và nước cốt chanh tươi. Để trái cây tự nói lên câu chuyện của mình.",ch3_highlight:'"Tôi không nhớ đã đổ bỏ bao nhiêu mẻ. Nhưng tôi không chịu dừng — vì những quả trái cây đó xứng đáng được hơn thế."',ch4_label:"Jamela Ra Đời",ch4_title:"Mẻ mứt hoàn hảo đầu tiên. Và một cái tên mang nghĩa xinh đẹp.",ch4_p1:"Kết quả: một hũ mứt thanh long ruột đỏ thuần tự nhiên 100%. Bốn nguyên liệu. Không thỏa hiệp. Và một cái tên để mang câu chuyện này đi xa hơn.",name_jam:"JAM — Mứt, sản phẩm chính. Ngọt ngào, chân thật, làm bằng tay.",name_ela:"Ê LA GI — thị xã ven biển nơi công thức cuối cùng được tìm ra.",name_bella:"BELLA — Xinh đẹp trong tiếng Ả Rập và Ý. Vì vẻ đẹp đôi khi đến từ những thứ bị người ta bỏ đi.",signoff_quote:'"Là một nhà khởi nghiệp, tôi mong Jamela không chỉ là một hũ mứt — mà là bằng chứng rằng nông sản Việt Nam có thể tạo ra sản phẩm giá trị tầm thế giới."',signoff_name:"— Người sáng lập, Jamela Việt Nam · Bình Thuận, 2025"}
+  },
+  ko: {
+    meta:{title:"Jamela — 베트남의 마음으로 만든 드래곤 프루트 잼"},
+    nav:{story:"우리의 이야기",founder:"창업 여정",product:"제품 소개",tiers:"후원하기",faq:"자주 묻는 질문"},
+    hero:{badge:"크라우드펀딩 캠페인 — 진행 중",headline:"버려지는 과일을 구하는 잼.",subheadline:"매년 빈투언 드래곤 프루트 수확량의 30%가 버려집니다. 너무 작거나, 모양이 이상하거나, 수출 기준에 맞지 않는다는 이유로. 저희는 그것을 특별한 무언가로 만들어냅니다.",cta_primary:"Jamela 후원하기",cta_secondary:"스토리 영상 보기",goal_label:"목표금액",raised_label:"모금 완료",backers_label:"후원자",days_label:"일 남음"},
+    story:{badge:"Jamela가 탄생한 이유",headline:"수출용 완벽한 과일. 나머지는 — 낭비.",p1:"베트남 빈투언 지역은 세계 최대 드래곤 프루트 산지입니다. 매 수확철마다 농부들은 엄격한 수출 기준에 따라 과일을 선별합니다.",p2:"나머지 30%는 달콤하고 영양가 있음에도 지역 시장에 헐값으로 팔리거나 가축의 먹이가 됩니다. 매 계절마다 수십만 톤의 농업 폐기물이 발생합니다.",p3:"8개월간의 연구 개발 끝에 저희는 답을 찾았습니다. B등급 과일로만 만든 클린 라벨 드래곤 프루트 잼. 정제 설탕도, 방부제도 없습니다.",stat1_number:"30%",stat1_label:"매 계절 폐기되는 수확량",stat2_number:"8개월",stat2_label:"R&D 기간",stat3_number:"0",stat3_label:"정제 설탕 또는 첨가물"},
+    product:{badge:"원재료",headline:"네 가지 재료. 그게 전부입니다.",ingredient1_name:"붉은 드래곤 프루트",ingredient1_desc:"빈투언 농장의 B등급 과일. 껍질과 씨 제거 후 저온 조리.",ingredient2_name:"사탕수수 당밀",ingredient2_desc:"신선한 사탕수수즙을 압착해 농축. 자연 단맛, 낮은 GI 지수.",ingredient3_name:"청사과",ingredient3_desc:"천연 펙틴 공급원. 첨가물 없이 잼의 완벽한 농도를 만들어냅니다.",ingredient4_name:"신선한 레몬즙",ingredient4_desc:"상큼함, 균형감, 그리고 자연 보존력.",cert1:"베트남 식품 안전 인증 (ATTP) — 완료",cert2:"영양 성분표 — 완료",cert3:"미국 FDA 등록 — 펀딩 목표",cert4:"EU 식품 수입 규정 준수 — 스트레치 골"},
+    tiers:{badge:"후원 등급 선택",headline:"Jamela를 후원하고, 첫 번째 잼을 받으세요.",subheadline:"모든 리워드는 FDA 등록 완료 후 발송됩니다. 2주마다 농장 소식을 전해드립니다.",popular_label:"가장 인기 있는",tier1:{name:"얼리 서포터",price:"$25",limit:"200명 한정",items:["Jamela 잼 1병 (200g)","빈투언에서 보내는 손편지 엽서","파운딩 백커 명단에 이름 등재"],eta:"예상 배송: 2026년 3분기",cta:"$25로 후원하기"},tier2:{name:"팜 프렌드",price:"$75",limit:"100명 한정",items:["Jamela 잼 3병 (각 200g)","팜 스토리 북릿 — 실물 인쇄본","서명된 후원 인증서","정식 판매 시 얼리 액세스 권한"],eta:"예상 배송: 2026년 3분기",cta:"$75로 후원하기"},tier3:{name:"제로 웨이스트 챔피언",price:"$150",limit:"30명 한정",items:["Jamela 잼 6병 (각 200g)","파운딩 백커 에디션 라벨에 이름 인쇄","창업자와 15분 화상 통화","모든 미래 주문 15% 영구 할인"],eta:"예상 배송: 2026년 3분기",cta:"챔피언 되기"}},
+    budget:{badge:"후원금의 사용처",headline:"100% 투명하게 공개합니다.",item1_label:"식품 안전 인증 & 실험실 검사",item1_amount:"$3,500",item1_desc:"국제 ATTP, 미생물 검사 — FDA를 위한 기반",item2_label:"리워드 첫 번째 배치 생산",item2_amount:"$2,500",item2_desc:"원재료, Jamela 브랜드 병, 수출용 패키징",item3_label:"물류 — 베트남 → 미국 허브 → 후원자",item3_amount:"$2,000",item3_desc:"국제 화물 + 파트너사를 통한 미국 내 배송",item4_label:"패키징 디자인 & 브랜드 아이덴티티",item4_amount:"$1,200",item4_desc:"FDA 형식 라벨 디자인, 수출용 패키징",item5_label:"캠페인 운영 & 예비 비용",item5_amount:"$800",item5_desc:"결제 수수료, 호스팅, 예상치 못한 비용",stretch_label:"스트레치 골 — $25,000",stretch_desc:"FDA 등록 + 한정판 기프트 박스 에디션 + 공식 Jamela 웹사이트에 이름 등재."},
+    faq:{badge:"자주 묻는 질문",headline:"궁금한 점을 해소해 드립니다",items:[{q:"리워드는 언제 받을 수 있나요?",a:"2026년 3분기로 예상합니다. FDA 등록 완료 및 첫 번째 생산 배치 완성 후 발송됩니다."},{q:"이건 기부인가요, 구매인가요?",a:"리워드 기반 크라우드펀딩 캠페인입니다. 정식 판매 전 파운딩 백커 가격으로 Jamela를 선주문하시는 것입니다."},{q:"결제와 배송은 어떻게 되나요?",a:"해외 결제는 Paddle을 통해 USD로 안전하게 처리됩니다. 미국 내 배송은 현지 파트너사가 담당합니다."},{q:"목표금액에 도달하지 못하면 어떻게 되나요?",a:"$10,000에 도달하지 못하면 모든 후원자에게 전액 환불됩니다."},{q:"Jamela는 정말 건강에 좋은가요?",a:"정제 설탕 없음. 펙틴 첨가물 없음. 방부제 없음. 유일한 감미료는 천연 사탕수수 당밀입니다."},{q:"왜 드래곤 프루트인가요?",a:"빈투언의 붉은 드래곤 프루트는 항산화 물질, 베탈라인, 식이섬유가 풍부하며 흰 과육 품종과는 완전히 다른 맛을 냅니다."},{q:"환불이 가능한가요?",a:"후원 후 14일 이내, 생산 시작 전에 환불 요청이 가능합니다."},{q:"진행 상황은 어떻게 확인하나요?",a:"모든 후원자는 2주마다 농장 이메일 업데이트를 받으십니다."}]},
+    upsell:{headline:"Jamela를 후원해 주셔서 감사합니다!",subheadline:"한 가지 더 — 소중한 분께 Jamela를 선물하시겠어요?",gift_box_title:"기프트 박스 — $15 추가",gift_box_desc:"농장에서 쓴 손편지와 함께 선물용 박스에 담긴 잼 1병.",gift_box_cta:"기프트 잼 추가하기",skip:"괜찮습니다, 다음으로"},
+    footer:{tagline:"구조된 과일로, 정성을 담아.",contact:"hello@jamelavietnam.com",rights:"© 2025 Jamela. All rights reserved."},
+    founder:{badge:"Jamela 이야기",headline:"어린 시절의 기억에서\n하나의 의미 있는 잼으로.",ch1_label:"잊혀지지 않은 기억",ch1_title:"빈투언의 하얀 모래, 그리고 모든 것을 바꾼 과일 하나.",ch1_p1:"빈투언에 대한 첫 번째 기억은 가족과 함께 딘 타이 팀 사원으로 떠난 순례 여행이었습니다. 작열하는 백사장과 바닷바람이 뒤섞인 그 열기 속에서, 누군가 갓 자른 드래곤 프루트를 건네주었습니다.",ch1_p2:"그 순간, 과일 한 조각이 모든 더위를 사라지게 했습니다. 시원하고, 달콤하고, 깊이 베트남다웠습니다. 길가에는 드래곤 프루트 산더미가 쌓여 있었고 — 킬로그램당 500동에서 3,000동에 팔렸습니다. 아름답고, 풍요롭고, 거의 공짜나 다름없었습니다.",ch1_highlight:'"그 타오르는 햇살 아래, 드래곤 프루트 한 조각이 더위를 모두 날려버렸습니다. 그 느낌을 저는 결코 잊지 못했습니다."',ch2_label:"모든 것이 바뀐 순간",ch2_title:"2024년. 판티엣. 과일 산더미 — 그리고 하나의 질문.",ch2_p1:"2024–2025년, 일 때문에 빈투언으로 돌아왔습니다. 판티엣, 함투언 박·남, 무이 케 가, 라이 기까지. 그리고 다시 그 광경이 펼쳐졌습니다. 수천 개의 드래곤 프루트가 들판 옆에 산처럼 쌓여 있었습니다. 농부들에게 다가가 물었습니다.",ch2_p2:"수출 기준에 못 미치는 불량품들이라고 했습니다 — 껍질이 상하거나, 모양이 불규칙하거나, 크기가 작거나. 상인들이 일부를 사가고, 나머지는 썩거나 소의 먹이가 됩니다. 매 계절 수십만 톤. 여전히 달콤하고 영양가 있는 과일이 폐기물이 되는 현실.",ch2_highlight:'"왜? 단 하나의 단어가 하나의 무모한 아이디어를 불러일으켰습니다: 버려지는 것을 진짜 가치 있는 것으로 바꾸자."',ch3_label:"8개월간의 아름다운 실패",ch3_title:"탄 배치들. 밤새운 날들. 그리고 수없이 버려진 잼.",ch3_p1:"R&D 과정은 전혀 화려하지 않았습니다. 온도를 지키다 깜빡 잠들어 태우거나, 너무 묽거나, 너무 되거나. 버린 재료의 양을 계산해보니 오토바이 한 대를 살 수 있을 정도였습니다.",ch3_p2:"초기 버전을 맛본 친구들의 솔직하고 냉정한 피드백을 받은 순간들도 있었습니다. 정말로 의심스러운 밤들도 있었습니다. 하지만 무언가 고집스러운 것이 포기를 거부했습니다.",ch3_p3:"라이 기의 친구들과 나눈 대화와 수개월의 시행착오 끝에 마침내 답을 찾았습니다. 정제 설탕을 빼고 사탕수수 당밀로. 첨가물을 빼고 청사과와 생레몬즙으로. 과일 자체가 말하게 하는 것.",ch3_highlight:'"몇 번이나 버렸는지 모릅니다. 하지만 포기하지 않았습니다 — 그 과일들은 더 나은 결말을 받을 자격이 있었으니까요."',ch4_label:"Jamela의 탄생",ch4_title:"처음으로 완벽한 잼. 그리고 아름다움을 의미하는 이름.",ch4_p1:"결과: 100% 천연 드래곤 프루트 잼. 네 가지 재료. 타협 없음. 그리고 이 이야기를 앞으로 나아가게 할 이름.",name_jam:"JAM — 잼, 제품 그 자체. 달콤하고, 정직하고, 손으로 만든.",name_ela:"Ê LA GI — 마침내 레시피가 완성된 해안 마을.",name_bella:"BELLA — 아랍어와 이탈리아어로 '아름다운'. 버려진 것에서도 아름다움이 올 수 있기에.",signoff_quote:'"창업자로서, Jamela가 단순한 잼이 아닌 — 베트남 농업이 세계적 수준의 가치를 만들 수 있다는 증거가 되길 바랍니다."',signoff_name:"— 창업자, Jamela Vietnam · 빈투언, 2025"}
+  }
+};
+
+let currentLang = 'en';
+let currentTier = 'tier1';
+
+const tierPrices = {
+  en: { tier1:'$25', tier2:'$75', tier3:'$150' },
+  vi: { tier1:'580.000đ', tier2:'1.750.000đ', tier3:'3.500.000đ' },
+  ko: { tier1:'$25', tier2:'$75', tier3:'$150' }
+};
+const sepayAmounts = {
+  tier1: '580.000 VND (~$25)',
+  tier2: '1.750.000 VND (~$75)',
+  tier3: '3.500.000 VND (~$150)'
+};
+
+// Deep get
+function get(obj, path) {
+  return path.split('.').reduce((o, k) => (o && o[k] !== undefined ? o[k] : ''), obj);
+}
+
+function applyTranslations(lang) {
+  const t = translations[lang];
+  // Text nodes
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const val = get(t, key);
+    if (val) el.textContent = val;
+  });
+  // Tier items
+  ['tier1','tier2','tier3'].forEach((tier, i) => {
+    const ul = document.getElementById(`${tier}-items`);
+    if (!ul) return;
+    const items = get(t, `tiers.${tier}.items`);
+    if (Array.isArray(items)) {
+      ul.innerHTML = items.map(item => `<li>${item}</li>`).join('');
+    }
+  });
+  // FAQ
+  const faqContainer = document.getElementById('faq-container');
+  const faqItems = get(t, 'faq.items');
+  if (faqContainer && Array.isArray(faqItems)) {
+    faqContainer.innerHTML = faqItems.map((item, i) => `
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">${item.q}<span class="faq-toggle">+</span></div>
+        <div class="faq-a">${item.a}</div>
+      </div>
+    `).join('');
+  }
+  // Show/hide SePay tab based on language
+  const tabSepay = document.getElementById('tab-sepay');
+  if (tabSepay) {
+    tabSepay.classList.toggle('hidden', lang !== 'vi');
+  }
+  // Page title
+  document.title = get(t, 'meta.title') || 'Jamela';
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+  document.documentElement.lang = lang;
+  applyTranslations(lang);
+  // Reset to paddle tab if switching away from vi
+  if (lang !== 'vi') switchTab('paddle');
+}
+
+function toggleFaq(el) {
+  el.classList.toggle('open');
+}
+function scrollToTiers() { document.getElementById('tiers').scrollIntoView({behavior:'smooth'}); }
+function scrollToStory()  { document.getElementById('story').scrollIntoView({behavior:'smooth'}); }
+
+// Payment modal
+function openPayment(tier) {
+  currentTier = tier;
+  const t = translations[currentLang];
+  const name = get(t, `tiers.${tier}.name`);
+  const price = get(t, `tiers.${tier}.price`);
+  document.getElementById('modal-tier-name').textContent = name;
+  document.getElementById('modal-title').textContent = price;
+  document.getElementById('sepay-amount').textContent = sepayAmounts[tier];
+  document.getElementById('transfer-ref').textContent = `JAMELA-${tier.toUpperCase()}-[EMAIL]`;
+  // Show/hide sepay tab
+  const tabSepay = document.getElementById('tab-sepay');
+  if (tabSepay) tabSepay.classList.toggle('hidden', currentLang !== 'vi');
+  switchTab('paddle');
+  document.getElementById('payment-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePayment() {
+  document.getElementById('payment-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function switchTab(tab) {
+  document.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.pay-panel').forEach(p => p.classList.remove('active'));
+  const tabEl = document.getElementById(`tab-${tab}`);
+  const panelEl = document.getElementById(`panel-${tab}`);
+  if (tabEl) tabEl.classList.add('active');
+  if (panelEl) panelEl.classList.add('active');
+}
+document.getElementById('payment-modal').addEventListener('click', function(e) {
+  if (e.target === this) closePayment();
+});
+// Simulate payment confirm → show thank you
+document.getElementById('paddle-confirm').addEventListener('click', function() {
+  closePayment();
+  setTimeout(() => {
+    document.getElementById('thankyou').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }, 200);
+});
+function closeThankyou() {
+  document.getElementById('thankyou').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Progress bar animation
+function animateProgress() {
+  const raised = 1240, goal = 10000;
+  const pct = Math.min((raised / goal) * 100, 100);
+  setTimeout(() => {
+    document.getElementById('progress-fill').style.width = pct + '%';
+  }, 400);
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+  applyTranslations('en');
+  animateProgress();
+});
+</script>
+</body>
+</html>
