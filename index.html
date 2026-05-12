@@ -1127,8 +1127,8 @@
         </div>
         <div class="bank-info">
           <div class="bank-row"><span>Ngân hàng</span><span>MB Bank</span></div>
-          <div class="bank-row"><span>Số tài khoản</span><span>0938896398</span></div>
-          <div class="bank-row"><span>Chủ tài khoản</span><span>NGUYEN QUOC VIET</span></div>
+          <div class="bank-row"><span>Số tài khoản</span><span>5489151401199</span></div>
+          <div class="bank-row"><span>Chủ tài khoản</span><span>TATHACO JS CO</span></div>
           <div class="bank-row"><span>Số tiền</span><span id="sepay-amount-row" style="color:var(--red);font-weight:700">580.000đ</span></div>
           <div class="bank-row"><span>Nội dung CK</span><span id="sepay-ref-display" style="color:var(--red);font-weight:600">JAMELA ...</span></div>
         </div>
@@ -1357,10 +1357,10 @@ function showSepayQR() {
   const amount = tierData.vnd;
 
   // Tạo QR bằng VietQR API — miễn phí, không cần đăng ký
-  const qrUrl = `https://img.vietqr.io/image/MB-0938896398-compact2.png` +
+  const qrUrl = `https://img.vietqr.io/image/MB-5489151401199-compact2.png` +
     `?amount=${amount}` +
     `&addInfo=${encodeURIComponent(ref)}` +
-    `&accountName=${encodeURIComponent('NGUYEN QUOC VIET')}`;
+    `&accountName=${encodeURIComponent('TATHACO JS CO')}`;
 
   document.getElementById('sepay-qr-img').src = qrUrl;
   document.getElementById('sepay-amount-display').textContent = tierData.label;
