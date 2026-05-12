@@ -705,6 +705,73 @@
     .name-origin { grid-template-columns: 1fr; gap: 16px; }
     .founder-sign { flex-direction: column; text-align: center; }
   }
+
+  /* ── FORM MỚI — BACKER INFO ── */
+  .modal { max-height: 92vh; overflow-y: auto; }
+
+  .form-step { display: none; }
+  .form-step.active { display: block; }
+
+  .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media(max-width:480px){ .form-row-2 { grid-template-columns: 1fr; } }
+
+  .form-select {
+    width: 100%; padding: 12px 14px; border-radius: 8px;
+    border: 1.5px solid var(--border); font-size: 14px;
+    background: var(--cream); transition: border-color .2s;
+    font-family: 'DM Sans', sans-serif; cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A8A8A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+  .form-select:focus { outline: none; border-color: var(--red); }
+
+  .intl-notice {
+    background: var(--gold-light);
+    border: 1.5px solid var(--gold);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin-top: 8px;
+  }
+  .intl-notice h4 { font-size: 14px; font-weight: 700; color: var(--gold); margin-bottom: 8px; }
+  .intl-notice p  { font-size: 13px; color: var(--ink-mid); line-height: 1.6; margin-bottom: 6px; }
+  .intl-notice strong { color: var(--ink); }
+  .intl-wu-box {
+    background: var(--white); border-radius: 8px;
+    padding: 12px 14px; margin-top: 10px;
+    font-size: 13px; line-height: 2;
+    border: 1px solid var(--border);
+  }
+  .intl-wu-box b { color: var(--red); }
+
+  .form-note {
+    font-size: 11px; color: var(--ink-soft);
+    margin-top: 4px; line-height: 1.5;
+  }
+  .btn-back-form {
+    background: none; border: none; color: var(--ink-soft);
+    font-size: 13px; cursor: pointer; padding: 0;
+    margin-bottom: 16px; display: flex; align-items: center; gap: 4px;
+  }
+  .btn-back-form:hover { color: var(--red); }
+
+  .submitting-overlay {
+    position: absolute; inset: 0; border-radius: var(--radius-lg);
+    background: rgba(255,255,255,.85);
+    display: none; align-items: center; justify-content: center;
+    flex-direction: column; gap: 12px; z-index: 10;
+  }
+  .submitting-overlay.active { display: flex; }
+  .spin {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 3px solid var(--border);
+    border-top-color: var(--red);
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
 </style>
 </head>
 <body>
@@ -723,6 +790,7 @@
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
     <button class="lang-btn" onclick="setLang('vi')">VI</button>
     <button class="lang-btn" onclick="setLang('ko')">한국어</button>
+    <button class="lang-btn" onclick="setLang('ja')">日本語</button>
   </div>
 </nav>
 
@@ -1075,72 +1143,124 @@
 
 <!-- PAYMENT MODAL -->
 <div class="modal-overlay" id="payment-modal">
-  <div class="modal">
+  <div class="modal" style="position:relative;">
+    <div class="submitting-overlay" id="submitting-overlay">
+      <div class="spin"></div>
+      <div style="font-size:13px;color:var(--ink-soft)" id="submitting-txt">Đang gửi thông tin...</div>
+    </div>
+
     <button class="modal-close" onclick="closePayment()">✕</button>
     <div class="modal-tier-name" id="modal-tier-name"></div>
     <div class="modal-title" id="modal-title"></div>
 
-    <div class="payment-tabs" id="payment-tabs">
-      <button class="pay-tab active" id="tab-paddle" onclick="switchTab('paddle')">💳 Card (USD)</button>
-      <button class="pay-tab" id="tab-sepay" onclick="switchTab('sepay')">📱 QR / Banking</button>
-    </div>
+    <!-- ── STEP 1: FORM THÔNG TIN ── -->
+    <div class="form-step active" id="step-info">
 
-    <div class="pay-panel active" id="panel-paddle">
+      <!-- Họ tên -->
       <div class="form-group">
-        <label class="form-label">Full name</label>
-        <input class="form-input" type="text" placeholder="Your name">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Email address</label>
-        <input class="form-input" type="email" placeholder="you@email.com">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Shipping country</label>
-        <input class="form-input" type="text" placeholder="United States, Korea, ...">
-      </div>
-      <button class="pay-confirm" id="paddle-confirm">Continue to secure checkout →</button>
-      <div class="pay-secure">🔒 Secured by Paddle — your card is never stored</div>
-    </div>
-
-    <div class="pay-panel" id="panel-sepay">
-      <!-- Form nhập SĐT -->
-      <div id="sepay-phone-step">
-        <div class="form-group">
-          <label class="form-label">Số điện thoại của bạn</label>
-          <input class="form-input" type="tel" id="sepay-phone" placeholder="0901234567" maxlength="10">
-          <div style="font-size:11px;color:var(--ink-soft);margin-top:4px">Dùng để xác nhận thanh toán và giao hàng</div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Họ tên</label>
-          <input class="form-input" type="text" id="sepay-name" placeholder="Nguyễn Văn A">
-        </div>
-        <button class="pay-confirm" onclick="showSepayQR()">Tạo mã QR thanh toán →</button>
+        <label class="form-label" id="lbl-name">Họ &amp; tên *</label>
+        <input class="form-input" type="text" id="f-name" placeholder="Nguyễn Văn A" autocomplete="name">
       </div>
 
-      <!-- QR hiển thị sau khi nhập SĐT -->
-      <div id="sepay-qr-step" style="display:none">
-        <div class="qr-box">
-          <img id="sepay-qr-img" src="" alt="QR thanh toán Jamela"
-            style="width:180px;height:180px;border-radius:8px;display:block;margin:0 auto 12px">
-          <div class="qr-amount" id="sepay-amount-display">580.000 VND</div>
-          <div class="qr-bank">Quét bằng bất kỳ app ngân hàng nào</div>
+      <!-- Email -->
+      <div class="form-group">
+        <label class="form-label" id="lbl-email">Email *</label>
+        <input class="form-input" type="email" id="f-email" placeholder="you@email.com" autocomplete="email">
+      </div>
+
+      <!-- SĐT (chỉ VN) -->
+      <div class="form-group" id="grp-phone">
+        <label class="form-label" id="lbl-phone">Số điện thoại *</label>
+        <input class="form-input" type="tel" id="f-phone" placeholder="0901234567" maxlength="11" autocomplete="tel">
+        <div class="form-note" id="note-phone">Dùng làm mã xác nhận chuyển khoản</div>
+      </div>
+
+      <!-- Quốc gia -->
+      <div class="form-group">
+        <label class="form-label" id="lbl-country">Quốc gia *</label>
+        <select class="form-select" id="f-country" onchange="onCountryChange()">
+          <option value="">— Chọn quốc gia —</option>
+          <option value="Vietnam">🇻🇳 Việt Nam</option>
+          <option value="United States">🇺🇸 United States</option>
+          <option value="South Korea">🇰🇷 South Korea / 대한민국</option>
+          <option value="Japan">🇯🇵 Japan / 日本</option>
+          <option value="Other">🌏 Other country</option>
+        </select>
+      </div>
+
+      <!-- Tỉnh/Bang — thay đổi theo quốc gia -->
+      <div class="form-group" id="grp-province">
+        <label class="form-label" id="lbl-province">Tỉnh / Thành phố *</label>
+        <select class="form-select" id="f-province">
+          <option value="">— Chọn tỉnh/thành —</option>
+        </select>
+      </div>
+
+      <!-- Địa chỉ chi tiết -->
+      <div class="form-group">
+        <label class="form-label" id="lbl-address">Địa chỉ nhận hàng *</label>
+        <input class="form-input" type="text" id="f-address" placeholder="Số nhà, đường, phường/xã..." autocomplete="street-address">
+      </div>
+
+      <button class="pay-confirm" onclick="submitBackerInfo()" id="btn-submit-info">
+        Tiếp tục thanh toán →
+      </button>
+      <div class="pay-secure" id="txt-secure">🔒 Thông tin được bảo mật — chỉ dùng để giao hàng</div>
+    </div>
+
+    <!-- ── STEP 2A: QR THANH TOÁN (VN) ── -->
+    <div class="form-step" id="step-qr">
+      <button class="btn-back-form" onclick="goBackToForm()">← Sửa thông tin</button>
+      <div class="qr-box">
+        <img id="sepay-qr-img" src="" alt="QR thanh toán Jamela"
+          style="width:190px;height:190px;border-radius:8px;display:block;margin:0 auto 12px">
+        <div id="qr-fallback-msg" style="display:none;text-align:center;padding:12px;background:#fff3cd;border-radius:8px;font-size:13px;color:#856404;">
+          ⚠️ Không tải được QR. Vui lòng chuyển khoản theo thông tin bên dưới.
         </div>
-        <div class="bank-info">
-          <div class="bank-row"><span>Ngân hàng</span><span>MB Bank</span></div>
-          <div class="bank-row"><span>Số tài khoản</span><span>5489151401199</span></div>
-          <div class="bank-row"><span>Chủ tài khoản</span><span>TATHACO JS CO</span></div>
-          <div class="bank-row"><span>Số tiền</span><span id="sepay-amount-row" style="color:var(--red);font-weight:700">580.000đ</span></div>
-          <div class="bank-row"><span>Nội dung CK</span><span id="sepay-ref-display" style="color:var(--red);font-weight:600">JAMELA ...</span></div>
+        <div class="qr-amount" id="sepay-amount-display">580.000đ</div>
+        <div class="qr-bank">Quét bằng bất kỳ app ngân hàng nào</div>
+      </div>
+      <div class="bank-info">
+        <div class="bank-row"><span>Ngân hàng</span><span>MB Bank</span></div>
+        <div class="bank-row"><span>Số tài khoản</span><span style="font-weight:700;color:var(--red)">5489151401199</span></div>
+        <div class="bank-row"><span>Chủ tài khoản</span><span>TATHACO JS CO</span></div>
+        <div class="bank-row"><span>Số tiền</span><span id="sepay-amount-row" style="color:var(--red);font-weight:700">580.000đ</span></div>
+        <div class="bank-row"><span>Nội dung CK</span>
+          <span id="sepay-ref-display" style="color:var(--red);font-weight:700;cursor:pointer" onclick="copyRef()" title="Bấm để copy">JAMELA ... 📋</span>
         </div>
-        <div style="margin-top:12px;padding:10px;background:var(--green-light);border-radius:var(--radius);text-align:center">
-          <div style="font-size:12px;color:var(--green);font-weight:500">⚡ Tự động xác nhận sau 1–2 phút</div>
-          <div style="font-size:11px;color:var(--green);margin-top:2px">Sau khi chuyển khoản thành công</div>
+      </div>
+      <div style="margin-top:12px;padding:10px;background:var(--green-light);border-radius:var(--radius);text-align:center">
+        <div style="font-size:12px;color:var(--green);font-weight:600">⚡ Hệ thống tự xác nhận sau 1–2 phút</div>
+        <div style="font-size:11px;color:var(--green);margin-top:2px">Sau khi chuyển khoản thành công</div>
+      </div>
+      <button onclick="checkSepayPayment()" style="width:100%;margin-top:12px;padding:13px;border-radius:50px;border:1.5px solid var(--green);color:var(--green);background:transparent;font-size:14px;font-weight:600;cursor:pointer">
+        ✓ Tôi đã chuyển khoản xong
+      </button>
+    </div>
+
+    <!-- ── STEP 2B: QUỐC TẾ — WESTERN UNION ── -->
+    <div class="form-step" id="step-intl">
+      <button class="btn-back-form" onclick="goBackToForm()">← Edit info</button>
+      <div style="text-align:center;margin-bottom:16px">
+        <div style="font-size:36px">🌏</div>
+        <div style="font-size:16px;font-weight:700;margin-top:8px" id="intl-thanks">Thank you for your interest!</div>
+        <div style="font-size:13px;color:var(--ink-soft);margin-top:4px" id="intl-recorded">Your information has been recorded.</div>
+      </div>
+      <div class="intl-notice">
+        <h4 id="intl-title">💳 Online payment coming soon</h4>
+        <p id="intl-desc">International card payment (USD/KRW/JPY) is being set up. While you wait, you can support us via <strong>Western Union</strong>:</p>
+        <div class="intl-wu-box">
+          <div><b>Recipient:</b> NGUYEN QUOC VIET</div>
+          <div><b>Company:</b> TATHACO JS CO</div>
+          <div><b>Country:</b> Vietnam</div>
+          <div><b>City:</b> La Gi, Binh Thuan</div>
+          <div><b>Purpose:</b> Jamela Campaign — <span id="wu-tier">Tier 1</span></div>
+          <div><b>Amount:</b> <span id="wu-amount">$25 USD</span></div>
         </div>
-        <button onclick="checkSepayPayment()" style="width:100%;margin-top:12px;padding:12px;border-radius:50px;border:1.5px solid var(--green);color:var(--green);background:transparent;font-size:14px;font-weight:600;cursor:pointer">
-          ✓ Tôi đã chuyển khoản xong
-        </button>
+        <p style="margin-top:10px;font-size:12px;color:var(--ink-soft)" id="intl-after">After sending, please email us the transfer receipt at <strong>hello@jamelavietnam.com</strong></p>
       </div>
     </div>
+
   </div>
 </div>
 
@@ -1160,6 +1280,282 @@
 </div>
 
 <script>
+// ── JAMELA PAYMENT CONFIG ─────────────────────────────────────────────────────
+const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxAhiAX4mWkqBENi4YnMZpeRLyd6iFUNM-W1XBQ0fImR1uVPdvtISrP-kN5JtIZ3VLK/exec';
+
+const TIER_DATA = {
+  tier1: { vnd: 580000,   usd: '$25',  label_vn: '580.000đ',   label_en: '$25 — 1 jar',  jars: 1 },
+  tier2: { vnd: 1750000,  usd: '$75',  label_vn: '1.750.000đ', label_en: '$75 — 3 jars', jars: 3 },
+  tier3: { vnd: 3500000,  usd: '$150', label_vn: '3.500.000đ', label_en: '$150 — 6 jars',jars: 6 },
+};
+
+const PROVINCES = {
+  Vietnam: ['An Giang','Bà Rịa - Vũng Tàu','Bắc Giang','Bắc Kạn','Bạc Liêu','Bắc Ninh','Bến Tre','Bình Định','Bình Dương','Bình Phước','Bình Thuận','Cà Mau','Cần Thơ','Cao Bằng','Đà Nẵng','Đắk Lắk','Đắk Nông','Điện Biên','Đồng Nai','Đồng Tháp','Gia Lai','Hà Giang','Hà Nam','Hà Nội','Hà Tĩnh','Hải Dương','Hải Phòng','Hậu Giang','Hòa Bình','Hưng Yên','Khánh Hòa','Kiên Giang','Kon Tum','Lai Châu','Lâm Đồng','Lạng Sơn','Lào Cai','Long An','Nam Định','Nghệ An','Ninh Bình','Ninh Thuận','Phú Thọ','Phú Yên','Quảng Bình','Quảng Nam','Quảng Ngãi','Quảng Ninh','Quảng Trị','Sóc Trăng','Sơn La','Tây Ninh','Thái Bình','Thái Nguyên','Thanh Hóa','Thừa Thiên Huế','Tiền Giang','TP. Hồ Chí Minh','Trà Vinh','Tuyên Quang','Vĩnh Long','Vĩnh Phúc','Yên Bái'],
+  'United States': ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'],
+  'South Korea': ['Seoul','Busan','Daegu','Incheon','Gwangju','Daejeon','Ulsan','Sejong','Gyeonggi','Gangwon','North Chungcheong','South Chungcheong','North Jeolla','South Jeolla','North Gyeongsang','South Gyeongsang','Jeju'],
+  Japan: ['Hokkaido','Aomori','Iwate','Miyagi','Akita','Yamagata','Fukushima','Ibaraki','Tochigi','Gunma','Saitama','Chiba','Tokyo','Kanagawa','Niigata','Toyama','Ishikawa','Fukui','Yamanashi','Nagano','Shizuoka','Aichi','Mie','Shiga','Kyoto','Osaka','Hyogo','Nara','Wakayama','Tottori','Shimane','Okayama','Hiroshima','Yamaguchi','Tokushima','Kagawa','Ehime','Kochi','Fukuoka','Saga','Nagasaki','Kumamoto','Oita','Miyazaki','Kagoshima','Okinawa'],
+  Other: [],
+};
+
+const FORM_LABELS = {
+  vi: {
+    name:'Họ & tên *', email:'Email *', phone:'Số điện thoại *',
+    country:'Quốc gia *', province:'Tỉnh / Thành phố *', address:'Địa chỉ nhận hàng *',
+    submit:'Tiếp tục thanh toán →', secure:'🔒 Thông tin bảo mật — chỉ dùng để giao hàng',
+    note_phone:'Dùng làm mã xác nhận chuyển khoản', province_ph:'— Chọn tỉnh/thành —',
+  },
+  en: {
+    name:'Full name *', email:'Email *', phone:'Phone (optional)',
+    country:'Country *', province:'State / Region *', address:'Shipping address *',
+    submit:'Submit & continue →', secure:'🔒 Your info is safe — used for shipping only',
+    note_phone:'', province_ph:'— Select state/region —',
+  },
+  ko: {
+    name:'성명 *', email:'이메일 *', phone:'전화번호 (선택)',
+    country:'국가 *', province:'시/도 *', address:'배송 주소 *',
+    submit:'계속하기 →', secure:'🔒 개인정보는 배송 목적으로만 사용됩니다',
+    note_phone:'', province_ph:'— 시/도 선택 —',
+  },
+  ja: {
+    name:'お名前 *', email:'メールアドレス *', phone:'電話番号（任意）',
+    country:'国 *', province:'都道府県 *', address:'お届け先住所 *',
+    submit:'次へ →', secure:'🔒 個人情報は配送目的のみに使用されます',
+    note_phone:'', province_ph:'— 都道府県を選択 —',
+  },
+};
+
+const INTL_TEXT = {
+  en: {
+    thanks:'Thank you for your interest!', recorded:'Your information has been recorded. We'll be in touch!',
+    title:'💳 Online payment coming soon',
+    desc:'International card payment (USD) is being set up. While you wait, you can support us via <strong>Western Union</strong>:',
+    after:'After sending, please email us the transfer receipt at <strong>hello@jamelavietnam.com</strong>',
+  },
+  ko: {
+    thanks:'관심 가져주셔서 감사합니다!', recorded:'정보가 기록되었습니다. 곧 연락드리겠습니다!',
+    title:'💳 온라인 결제 준비 중',
+    desc:'국제 카드 결제(KRW/USD)를 준비 중입니다. 그 전에 <strong>Western Union</strong>으로 후원하실 수 있습니다:',
+    after:'송금 후 영수증을 <strong>hello@jamelavietnam.com</strong>으로 보내주세요',
+  },
+  ja: {
+    thanks:'ご関心をありがとうございます！', recorded:'情報を受け取りました。近日中にご連絡いたします！',
+    title:'💳 オンライン決済は準備中です',
+    desc:'国際カード決済（JPY/USD）を準備中です。<strong>Western Union</strong>でご支援いただけます：',
+    after:'送金後、領収書を <strong>hello@jamelavietnam.com</strong> までお送りください',
+  },
+};
+
+// ── PROVINCE DROPDOWN ─────────────────────────────────────────────────────────
+function onCountryChange() {
+  const country = document.getElementById('f-country').value;
+  const sel = document.getElementById('f-province');
+  const grp = document.getElementById('grp-province');
+  const lbl = document.getElementById('lbl-province');
+  const lang = typeof currentLang !== 'undefined' ? currentLang : 'en';
+  const labels = FORM_LABELS[lang] || FORM_LABELS.en;
+
+  const provinces = PROVINCES[country] || [];
+
+  // Ẩn province nếu Other hoặc không có
+  if (!country || country === 'Other' || provinces.length === 0) {
+    grp.style.display = 'none';
+    return;
+  }
+  grp.style.display = 'block';
+
+  // Label theo quốc gia
+  if (country === 'Vietnam') lbl.textContent = 'Tỉnh / Thành phố *';
+  else if (country === 'United States') lbl.textContent = 'State *';
+  else if (country === 'South Korea') lbl.textContent = '시/도 *';
+  else if (country === 'Japan') lbl.textContent = '都道府県 *';
+  else lbl.textContent = labels.province;
+
+  sel.innerHTML = `<option value="">${labels.province_ph}</option>` +
+    provinces.map(p => `<option value="${p}">${p}</option>`).join('');
+
+  // VN → hiện SĐT, quốc tế ẩn
+  const grpPhone = document.getElementById('grp-phone');
+  if (country === 'Vietnam') {
+    grpPhone.style.display = 'block';
+  } else {
+    grpPhone.style.display = 'none';
+  }
+}
+
+// ── SUBMIT FORM → GOOGLE SHEET + TELEGRAM ────────────────────────────────────
+async function submitBackerInfo() {
+  const lang = typeof currentLang !== 'undefined' ? currentLang : 'en';
+  const name    = document.getElementById('f-name').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
+  const phone   = document.getElementById('f-phone').value.trim();
+  const country = document.getElementById('f-country').value;
+  const province= document.getElementById('f-province').value;
+  const address = document.getElementById('f-address').value.trim();
+
+  // Validate
+  if (!name)    { alert(lang==='vi'?'Vui lòng nhập họ tên':'Please enter your name'); return; }
+  if (!email || !email.includes('@')) { alert(lang==='vi'?'Email không hợp lệ':'Invalid email'); return; }
+  if (!country) { alert(lang==='vi'?'Vui lòng chọn quốc gia':'Please select country'); return; }
+  const provGrp = document.getElementById('grp-province');
+  if (provGrp.style.display !== 'none' && !province) {
+    alert(lang==='vi'?'Vui lòng chọn tỉnh/thành':'Please select state/region'); return;
+  }
+  if (!address) { alert(lang==='vi'?'Vui lòng nhập địa chỉ':'Please enter shipping address'); return; }
+  if (country === 'Vietnam' && phone.length < 9) {
+    alert('Vui lòng nhập số điện thoại hợp lệ'); return;
+  }
+
+  // Lưu backer info
+  const tier = typeof currentTier !== 'undefined' ? currentTier : 'tier1';
+  const td   = TIER_DATA[tier];
+  window._backerInfo = { name, email, phone, country, province, address, tier, lang };
+
+  // Hiện loading
+  const overlay = document.getElementById('submitting-overlay');
+  const txt     = document.getElementById('submitting-txt');
+  txt.textContent = lang==='vi' ? 'Đang gửi thông tin...' : 'Submitting...';
+  overlay.classList.add('active');
+
+  // Gửi Google Sheet + Telegram
+  const payload = {
+    name, email, phone, country,
+    province: province || country,
+    address,
+    tier,
+    amount: country === 'Vietnam' ? td.label_vn : td.usd,
+    lang,
+    status: country === 'Vietnam' ? 'pending_qr' : 'intl_pending',
+    note: country === 'Vietnam' ? 'VN — QR SePay' : 'INTL — Western Union',
+  };
+
+  try {
+    await fetch(GOOGLE_SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  } catch(e) {
+    console.warn('Sheet submit error (no-cors expected):', e);
+  }
+
+  overlay.classList.remove('active');
+
+  // Chuyển bước
+  if (country === 'Vietnam') {
+    showQRStep(phone, tier);
+  } else {
+    showIntlStep(tier, lang);
+  }
+}
+
+// ── BƯỚC QR (VN) ─────────────────────────────────────────────────────────────
+function showQRStep(phone, tier) {
+  const td  = TIER_DATA[tier] || TIER_DATA.tier1;
+  const ref = `JAMELA ${phone}`;
+
+  document.getElementById('sepay-amount-display').textContent = td.label_vn;
+  document.getElementById('sepay-amount-row').textContent     = td.label_vn;
+  document.getElementById('sepay-ref-display').textContent    = ref + ' 📋';
+  document.getElementById('sepay-ref-display').dataset.ref    = ref;
+
+  const baseQR  = 'https://img.vietqr.io/image/MB-5489151401199';
+  const qrParam = `?amount=${td.vnd}&addInfo=${encodeURIComponent(ref)}&accountName=${encodeURIComponent('TATHACO JS CO')}`;
+  const qrImg   = document.getElementById('sepay-qr-img');
+  const qrFb    = document.getElementById('qr-fallback-msg');
+
+  qrImg.style.display = 'block';
+  qrFb.style.display  = 'none';
+  qrImg._retry = false;
+  qrImg.onerror = function() {
+    if (!this._retry) {
+      this._retry = true;
+      this.src = baseQR + '-compact2.png' + qrParam;
+    } else {
+      this.style.display = 'none';
+      qrFb.style.display = 'block';
+    }
+  };
+  qrImg.src = baseQR + '-qr_only.png' + qrParam;
+
+  switchFormStep('step-qr');
+}
+
+function copyRef() {
+  const ref = document.getElementById('sepay-ref-display').dataset.ref || '';
+  navigator.clipboard.writeText(ref).then(() => {
+    document.getElementById('sepay-ref-display').textContent = ref + ' ✅';
+    setTimeout(() => {
+      document.getElementById('sepay-ref-display').textContent = ref + ' 📋';
+    }, 2000);
+  });
+}
+
+// ── BƯỚC QUỐC TẾ ─────────────────────────────────────────────────────────────
+function showIntlStep(tier, lang) {
+  const td = TIER_DATA[tier] || TIER_DATA.tier1;
+  const tx = INTL_TEXT[lang] || INTL_TEXT.en;
+
+  document.getElementById('intl-thanks').textContent   = tx.thanks;
+  document.getElementById('intl-recorded').textContent = tx.recorded;
+  document.getElementById('intl-title').textContent    = tx.title;
+  document.getElementById('intl-desc').innerHTML       = tx.desc;
+  document.getElementById('intl-after').innerHTML      = tx.after;
+  document.getElementById('wu-tier').textContent       = tier.replace('tier','Tier ');
+  document.getElementById('wu-amount').textContent     = td.usd + ' USD';
+
+  switchFormStep('step-intl');
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function switchFormStep(id) {
+  document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  // Scroll modal về đầu
+  document.querySelector('#payment-modal .modal').scrollTop = 0;
+}
+
+function goBackToForm() {
+  switchFormStep('step-info');
+}
+
+function checkSepayPayment() {
+  closePayment();
+  setTimeout(() => {
+    document.getElementById('thankyou').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }, 200);
+}
+
+// ── UPDATE FORM LABELS THEO NGÔN NGỮ ─────────────────────────────────────────
+function updateFormLabels(lang) {
+  const lb = FORM_LABELS[lang] || FORM_LABELS.en;
+  const setTxt = (id, v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+  const setAttr= (id, a, v) => { const el=document.getElementById(id); if(el) el.setAttribute(a,v); };
+
+  setTxt('lbl-name',    lb.name);
+  setTxt('lbl-email',   lb.email);
+  setTxt('lbl-phone',   lb.phone);
+  setTxt('lbl-country', lb.country);
+  setTxt('lbl-province',lb.province);
+  setTxt('lbl-address', lb.address);
+  setTxt('btn-submit-info', lb.submit);
+  setTxt('txt-secure',  lb.secure);
+  setTxt('note-phone',  lb.note_phone);
+
+  // Placeholder province
+  const prov = document.getElementById('f-province');
+  if (prov && prov.options[0]) prov.options[0].text = lb.province_ph;
+
+  // Reset về form step 1 khi đổi ngôn ngữ
+  switchFormStep('step-info');
+
+  // Reset country → trigger onCountryChange
+  const fCountry = document.getElementById('f-country');
+  if (fCountry) onCountryChange();
+}
+
+
 // ── i18n DATA ──
 const translations = {
   en: {
@@ -1203,6 +1599,19 @@ const translations = {
     footer:{tagline:"구조된 과일로, 정성을 담아.",contact:"hello@jamelavietnam.com",rights:"© 2025 Jamela. All rights reserved."},
     why:{eyebrow:"모든 것을 시작한 질문",sub:'"왜 매 계절마다 수십만 톤의 멀쩡한 과일이 버려지는 걸까?"',answer:"그 답이 Jamela가 되었습니다."},
     founder:{badge:"Jamela 이야기",headline:"어린 시절의 기억에서\n하나의 의미 있는 잼으로.",ch1_label:"잊혀지지 않은 기억",ch1_title:"빈투언의 하얀 모래, 그리고 모든 것을 바꾼 과일 하나.",ch1_p1:"빈투언에 대한 첫 번째 기억은 가족과 함께 딘 타이 팀 사원으로 떠난 순례 여행이었습니다. 작열하는 백사장과 바닷바람이 뒤섞인 그 열기 속에서, 누군가 갓 자른 드래곤 프루트를 건네주었습니다.",ch1_p2:"그 순간, 과일 한 조각이 모든 더위를 사라지게 했습니다. 시원하고, 달콤하고, 깊이 베트남다웠습니다. 길가에는 드래곤 프루트 산더미가 쌓여 있었고 — 킬로그램당 500동에서 3,000동에 팔렸습니다. 아름답고, 풍요롭고, 거의 공짜나 다름없었습니다.",ch1_highlight:'"그 타오르는 햇살 아래, 드래곤 프루트 한 조각이 더위를 모두 날려버렸습니다. 그 느낌을 저는 결코 잊지 못했습니다."',ch2_label:"모든 것이 바뀐 순간",ch2_title:"2024년. 판티엣. 과일 산더미 — 그리고 하나의 질문.",ch2_p1:"2024–2025년, 일 때문에 빈투언으로 돌아왔습니다. 판티엣, 함투언 박·남, 무이 케 가, 라이 기까지. 그리고 다시 그 광경이 펼쳐졌습니다. 수천 개의 드래곤 프루트가 들판 옆에 산처럼 쌓여 있었습니다. 농부들에게 다가가 물었습니다.",ch2_p2:"수출 기준에 못 미치는 불량품들이라고 했습니다 — 껍질이 상하거나, 모양이 불규칙하거나, 크기가 작거나. 상인들이 일부를 사가고, 나머지는 썩거나 소의 먹이가 됩니다. 매 계절 수십만 톤. 여전히 달콤하고 영양가 있는 과일이 폐기물이 되는 현실.",ch2_highlight:'"왜? 단 하나의 단어가 하나의 무모한 아이디어를 불러일으켰습니다: 버려지는 것을 진짜 가치 있는 것으로 바꾸자."',ch3_label:"8개월간의 아름다운 실패",ch3_title:"탄 배치들. 밤새운 날들. 그리고 수없이 버려진 잼.",ch3_p1:"R&D 과정은 전혀 화려하지 않았습니다. 온도를 지키다 깜빡 잠들어 태우거나, 너무 묽거나, 너무 되거나, 비율이 잘못되거나. 버린 재료의 양을 계산해보니 새 혼다 SH 350i 오토바이를 살 수 있을 정도였습니다.",ch3_p2:"실패가 계속되었습니다. 드디어 됐다 싶어 친구들에게 가져갔다가 솔직하고 냉정한 피드백을 받은 날들도 있었습니다. 정말로 의심스러운 밤들도 있었습니다. 저는 답을 찾아 사방을 헤맸습니다 — 연구 자료를 읽고, 잼 제조 전통이 깊은 나라의 지인들에게 국제 전화를 걸어 식품 전문가들의 조언을 구했습니다.",ch3_p3:"그 대화들 — 식품 전문가들과, 바다 건너 친구들과, 수십 년간 잼을 만들어온 사람들과 — 이 퍼즐의 작지만 중요한 조각들을 주었습니다. 라이 기로 돌아와 수개월의 시행착오 끝에 마침내 답이 완성되었습니다. 정제 설탕을 빼고 신선한 사탕수수즙을 농축한 당밀로. 모든 식품 첨가물을 빼고 청사과와 생레몬즙으로. 과일 스스로 이야기하게 하는 것 — 적절한 온도에서, 손으로. Jamela가 탄생했습니다.",ch3_highlight:'"몇 번이나 버렸는지 모릅니다. 하지만 포기하지 않았습니다 — 그 과일들은 더 나은 결말을 받을 자격이 있었으니까요."',ch4_label:"Jamela의 탄생",ch4_title:"처음으로 완벽한 잼. 그리고 아름다움을 의미하는 이름.",ch4_p1:"결과: 100% 천연 드래곤 프루트 잼. 네 가지 재료. 타협 없음. 그리고 이 이야기를 앞으로 나아가게 할 이름.",name_jam:"JAM — 잼, 제품 그 자체. 달콤하고, 정직하고, 손으로 만든.",name_ela:"Ê LA GI — 마침내 레시피가 완성된 해안 마을.",name_bella:"BELLA — 아랍어와 이탈리아어로 '아름다운'. 버려진 것에서도 아름다움이 올 수 있기에.",signoff_quote:'"창업자로서, Jamela가 단순한 잼이 아닌 — 베트남 농업이 세계적 수준의 가치를 만들 수 있다는 증거가 되길 바랍니다."',signoff_name:"— 창업자, Jamela Vietnam · 빈투언, 2025",photo_hint:"창업자 사진"}
+  },
+  ja: {
+    meta:{title:"Jamela — ドラゴンフルーツジャム"},
+    hero:{badge:"クラウドファンディング — 進行中",headline:"捨てられる果物を救うジャム。",subheadline:"毎年、ビントゥアン省のドラゴンフルーツ収穫量の30%が廃棄されています。小さすぎる、形が悪い、輸出基準に合わないという理由で。私たちはそれを特別なものに変えます。",cta_primary:"Jamelaを支援する",cta_secondary:"ストーリーを見る",goal_label:"目標金額",raised_label:"達成済み",backers_label:"支援者",days_label:"残り日数"},
+    progress:{badge:"キャンペーン進捗",headline:"目標に向かって",subheadline:"あなたの支援が変化をもたらします。"},
+    tiers:{badge:"支援レベルを選ぶ",headline:"Jamelaを支援して、最初のジャムを手に入れよう。",subheadline:"全てのリワードはFDA登録完了後に発送されます。2週間ごとに農場からの最新情報をお届けします。",popular_label:"人気No.1",tier1:{name:"アーリーサポーター",price:"$25",limit:"200個限定",items:["Jamelaジャム1瓶（200g）","ビントゥアンからの手書きポストカード","ファウンディングバッカーリストにお名前掲載"],eta:"お届け予定：2026年Q3",cta:"$25で支援する"},tier2:{name:"ファームフレンド",price:"$75",limit:"100個限定",items:["Jamelaジャム3瓶（各200g）","ファームストーリーブックレット（印刷版）","サポート証明書（署名入り）","商品化時の先行購入権"],eta:"お届け予定：2026年Q3",cta:"$75で支援する"},tier3:{name:"ゼロウェイストチャンピオン",price:"$150",limit:"30個限定",items:["Jamelaジャム6瓶（各200g）","全ラベルにお名前印刷（ファウンディング版）","創業者との15分ビデオ通話","全注文に永久15%割引"],eta:"お届け予定：2026年Q3",cta:"チャンピオンになる"}},
+    ingredients:{badge:"原材料",headline:"4つの原材料。それだけ。",subheadline:"精製糖なし。添加物なし。ペクチンなし。ビントゥアン省の赤い果肉のドラゴンフルーツが主役です。",items:[{name:"赤い果肉のドラゴンフルーツ",desc:"ビントゥアン省産のBグレード — 甘くて、完熟していて、美しい。ただ輸出基準に合わないだけ。"},{name:"サトウキビ蜜",desc:"精製糖の代わり。天然の甘み、低GI、深みのあるコク。"},{name:"青リンゴ",desc:"天然のペクチン源。添加物なしでとろみをつける秘密。"},{name:"フレッシュレモン果汁",desc:"酸味のバランスを整え、色を鮮やかに保つ。"}],cert_label:"認証 & 品質基準"},
+    story:{badge:"Jamelaのストーリー",headline:"幼い頃の記憶から、
+目的を持った一瓶へ。"},
+    faq:{badge:"よくある質問",headline:"よくある質問",items:[{q:"リワードはいつ届きますか？",a:"2026年Q3を予定しています。FDA登録と最初の生産バッチ完了後に発送します。2週間ごとに農場からの最新情報をお届けします。"},{q:"これは寄付ですか、それとも購入ですか？",a:"これはリワードベースのクラウドファンディングです。ファウンディングバッカー価格でJamelaを先行予約しています。実際のジャム瓶を受け取ります。"},{q:"目標金額に達しなかった場合は？",a:"10,000ドルに達しない場合、全支援者に全額返金されます。リスクはありません。"},{q:"Jamelaは本当にヘルシーですか？",a:"精製糖なし。ペクチン添加物なし。保存料なし。唯一の甘味料は白砂糖より低GIの天然サトウキビ蜜です。"},{q:"返金は可能ですか？",a:"生産開始前の14日以内であれば返金申請が可能です。"}]},
+    upsell:{headline:"Jamelaを支援していただきありがとうございます！",subheadline:"もう一つ — 大切な方にJamelaを贈りませんか？",gift_box_title:"ギフトボックス — $15追加",gift_box_desc:"農場からの手書きメッセージ付きギフトボックスに入った追加の1瓶。",gift_box_cta:"はい、ギフト瓶を追加する",skip:"いいえ、このまま続ける"},
+    founder:{badge:"Jamelaのストーリー",headline:"幼い頃の記憶から、
+目的を持った一瓶へ。",ch1_label:"忘れられない記憶",ch1_title:"ビントゥアンの白い砂浜と、すべてを変えた一つの果物。",ch1_p1:"ビントゥアンへの初めての記憶は、Dinh Thay Thim — 灼熱の白い砂と海風の古い土地にある聖なる寺院への家族の巡礼でした。暑さは容赦なかった。そして、誰かが青空の下で新鮮に切ったドラゴンフルーツを渡してくれました。",ch1_p2:"その瞬間、果物の一滴一滴が暑さを消してくれました。涼しく、甘く、そして深くベトナム的な。道端には、1キログラムわずか500〜3,000ドン（VND）で売られるドラゴンフルーツが山のように積まれていました。美しく、豊かで、ほぼ無償で与えられていた。",ch1_highlight:'「あの燃えるような太陽の下で、ドラゴンフルーツの一口が暑さを消してくれた。その感覚を忘れることはできませんでした。」',ch2_label:"すべてが変わった瞬間",ch2_title:"2024年。パンティエット。果物の山 — そしてひとつの問い。",ch2_p1:"2024〜2025年、仕事でビントゥアンに戻りました。そこにはまたあの光景がありました：畑の脇に何千ものドラゴンフルーツが山積みにされていました。近寄って農家に聞いてみました。",ch2_p2:"これらは規格外品だと言われました。傷がある、形が不揃い、輸出には小さすぎる。業者が地元市場向けに一部を買い取りに来る。残りは？腐るに任せるか、家畜の餌になる。毎シーズン何十万トンもの廃棄物 — まだ甘く、栄養豊富で、美味しい果物から。",ch2_highlight:'「なぜ？捨てられるものを本当の価値あるものに変えるという、無謀なアイデアを生んだ一言でした。」',ch3_label:"美しき失敗の8ヶ月",ch3_title:"焦がしたバッチ。眠れない夜。そして多くのジャムを捨てた日々。",ch3_p1:"R&Dの過程は華やかではありませんでした。バッチを焦がし、緩すぎる、固すぎる、比率が間違っているなど、何度も捨てました。温度管理をしながら眠ってしまったこともありました。",ch3_p2:"失敗は続きました。やっと成功したと思っても、友人に試食させると正直で厳しいフィードバックが返ってきました。本当に迷った夜もありました。でも諦めませんでした — 果物がそれに値したから。",ch3_highlight:'「何バッチ捨てたかわかりません。でも諦めませんでした — 果物がそれに値したから。」',ch4_label:"Jamelaの誕生",ch4_title:"初めての完璧な一瓶。そして「美しい」という名前。",ch4_p1:"結果：100%天然のドラゴンフルーツジャム。4つの原材料。妥協なし。そしてそのストーリーを運ぶ名前。",name_jam:"Mứt — 製品そのもの。甘く、誠実で、手作り。",name_ela:"Ê La Gi — レシピが完成した海辺の町。",name_bella:"アラビア語とイタリア語で「美しい」。なぜなら美しさは捨てられたものからも生まれるから。",signoff_quote:'「創業者として、Jamelaが単なるジャム以上のものになることを願っています — ベトナム農業が世界クラスの価値を生み出せるという証明に。」',signoff_name:"— 創業者、Jamela Vietnam · ビントゥアン、2025年",photo_hint:"創業者の写真"}
   }
 };
 
@@ -1253,11 +1662,9 @@ function applyTranslations(lang) {
       </div>
     `).join('');
   }
-  // Show/hide SePay tab based on language
+  // SePay tab luôn hiện — không phụ thuộc ngôn ngữ
   const tabSepay = document.getElementById('tab-sepay');
-  if (tabSepay) {
-    tabSepay.classList.toggle('hidden', lang !== 'vi');
-  }
+  if (tabSepay) tabSepay.classList.remove('hidden');
   // Page title
   document.title = get(t, 'meta.title') || 'Jamela';
 }
@@ -1268,8 +1675,7 @@ function setLang(lang) {
   document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
   document.documentElement.lang = lang;
   applyTranslations(lang);
-  // Reset to paddle tab if switching away from vi
-  if (lang !== 'vi') switchTab('paddle');
+  updateFormLabels(lang);
 }
 
 function toggleFaq(el) {
@@ -1282,29 +1688,30 @@ function scrollToStory()  { document.getElementById('story').scrollIntoView({beh
 function openPayment(tier) {
   currentTier = tier;
   const t = translations[currentLang];
-  const name = get(t, `tiers.${tier}.name`);
+  const name  = get(t, `tiers.${tier}.name`);
   const price = get(t, `tiers.${tier}.price`);
   document.getElementById('modal-tier-name').textContent = name;
   document.getElementById('modal-title').textContent = price;
-  // Update sepay QR amounts when tier changes
-  const sepayData = sepayAmounts[tier] || SEPAY_AMOUNTS[tier];
-  if (sepayData) {
-    const amountDisplay = document.getElementById('sepay-amount-display');
-    const amountRow = document.getElementById('sepay-amount-row');
-    if (amountDisplay) amountDisplay.textContent = sepayData.label;
-    if (amountRow) amountRow.textContent = sepayData.label;
-  }
-  // Show/hide sepay tab
-  const tabSepay = document.getElementById('tab-sepay');
-  if (tabSepay) tabSepay.classList.toggle('hidden', currentLang !== 'vi');
-  switchTab('paddle');
+
+  // Reset về form step 1 mỗi lần mở
+  switchFormStep('step-info');
+
+  // Reset form fields
+  ['f-name','f-email','f-phone','f-address'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  const fc = document.getElementById('f-country');
+  if (fc) fc.value = '';
+  onCountryChange();
+
+  // Cập nhật label theo ngôn ngữ
+  updateFormLabels(currentLang);
+
   document.getElementById('payment-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-function closePayment() {
-  document.getElementById('payment-modal').classList.remove('open');
-  document.body.style.overflow = '';
-}
+
 function switchTab(tab) {
   document.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.pay-panel').forEach(p => p.classList.remove('active'));
@@ -1356,13 +1763,25 @@ function showSepayQR() {
   const ref = `JAMELA ${phone}`;
   const amount = tierData.vnd;
 
-  // Tạo QR bằng VietQR API — miễn phí, không cần đăng ký
-  const qrUrl = `https://img.vietqr.io/image/MB-5489151401199-compact2.png` +
-    `?amount=${amount}` +
-    `&addInfo=${encodeURIComponent(ref)}` +
-    `&accountName=${encodeURIComponent('TATHACO JS CO')}`;
+  // Tạo QR bằng VietQR API
+  const baseQR = 'https://img.vietqr.io/image/MB-5489151401199';
+  const qrParams = `?amount=${amount}&addInfo=${encodeURIComponent(ref)}&accountName=${encodeURIComponent('TATHACO JS CO')}`;
 
-  document.getElementById('sepay-qr-img').src = qrUrl;
+  const qrImg = document.getElementById('sepay-qr-img');
+  const qrFallback = document.getElementById('qr-fallback-msg');
+  qrImg.style.display = 'block';
+  qrFallback.style.display = 'none';
+  qrImg._retry = false;
+  qrImg.onerror = function() {
+    if (!this._retry) {
+      this._retry = true;
+      this.src = baseQR + '-compact2.png' + qrParams;
+    } else {
+      this.style.display = 'none';
+      qrFallback.style.display = 'block';
+    }
+  };
+  qrImg.src = baseQR + '-qr_only.png' + qrParams;
   document.getElementById('sepay-amount-display').textContent = tierData.label;
   document.getElementById('sepay-amount-row').textContent = tierData.label;
   document.getElementById('sepay-ref-display').textContent = ref;
@@ -1383,17 +1802,12 @@ function checkSepayPayment() {
   }, 200);
 }
 
-// Reset SePay panel khi đóng modal
-const _origClosePayment = closePayment;
-closePayment = function() {
-  _origClosePayment();
-  document.getElementById('sepay-phone-step').style.display = 'block';
-  document.getElementById('sepay-qr-step').style.display = 'none';
-  const phoneEl = document.getElementById('sepay-phone');
-  const nameEl = document.getElementById('sepay-name');
-  if (phoneEl) phoneEl.value = '';
-  if (nameEl) nameEl.value = '';
-};
+// closePayment — reset về step 1
+function closePayment() {
+  document.getElementById('payment-modal').classList.remove('open');
+  document.body.style.overflow = '';
+  switchFormStep('step-info');
+}
 
 // ── IMAGE LOADER ──
 // Để thêm ảnh hũ mứt thật: thay URL bên dưới bằng link ảnh thật của bạn
