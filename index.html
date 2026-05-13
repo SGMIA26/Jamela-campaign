@@ -1621,7 +1621,8 @@ let currentTier = 'tier1';
 const tierPrices = {
   en: { tier1:'$25', tier2:'$75', tier3:'$150' },
   vi: { tier1:'580.000đ', tier2:'1.750.000đ', tier3:'3.500.000đ' },
-  ko: { tier1:'$25', tier2:'$75', tier3:'$150' }
+  ko: { tier1:'$25', tier2:'$75', tier3:'$150' },
+  ja: { tier1:'$25', tier2:'$75', tier3:'$150' }
 };
 const sepayAmounts = {
   tier1: '580.000 VND (~$25)',
@@ -1720,17 +1721,6 @@ function switchTab(tab) {
   if (tabEl) tabEl.classList.add('active');
   if (panelEl) panelEl.classList.add('active');
 }
-document.getElementById('payment-modal').addEventListener('click', function(e) {
-  if (e.target === this) closePayment();
-});
-// Simulate payment confirm → show thank you
-document.getElementById('paddle-confirm').addEventListener('click', function() {
-  closePayment();
-  setTimeout(() => {
-    document.getElementById('thankyou').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }, 200);
-});
 function closeThankyou() {
   document.getElementById('thankyou').classList.remove('open');
   document.body.style.overflow = '';
@@ -1743,63 +1733,6 @@ function animateProgress() {
   setTimeout(() => {
     document.getElementById('progress-fill').style.width = pct + '%';
   }, 400);
-}
-
-// ── SEPAY QR ──
-const SEPAY_AMOUNTS = {
-  tier1: { vnd: 580000,   label: '580.000đ'   },
-  tier2: { vnd: 1750000,  label: '1.750.000đ' },
-  tier3: { vnd: 3500000,  label: '3.500.000đ' },
-};
-
-function showSepayQR() {
-  const phone = document.getElementById('sepay-phone').value.trim();
-  const name  = document.getElementById('sepay-name').value.trim();
-  if (!phone || phone.length < 9) {
-    alert('Vui lòng nhập số điện thoại hợp lệ'); return;
-  }
-
-  const tierData = SEPAY_AMOUNTS[currentTier] || SEPAY_AMOUNTS.tier1;
-  const ref = `JAMELA ${phone}`;
-  const amount = tierData.vnd;
-
-  // Tạo QR bằng VietQR API
-  const baseQR = 'https://img.vietqr.io/image/MB-5489151401199';
-  const qrParams = `?amount=${amount}&addInfo=${encodeURIComponent(ref)}&accountName=${encodeURIComponent('TATHACO JS CO')}`;
-
-  const qrImg = document.getElementById('sepay-qr-img');
-  const qrFallback = document.getElementById('qr-fallback-msg');
-  qrImg.style.display = 'block';
-  qrFallback.style.display = 'none';
-  qrImg._retry = false;
-  qrImg.onerror = function() {
-    if (!this._retry) {
-      this._retry = true;
-      this.src = baseQR + '-compact2.png' + qrParams;
-    } else {
-      this.style.display = 'none';
-      qrFallback.style.display = 'block';
-    }
-  };
-  qrImg.src = baseQR + '-qr_only.png' + qrParams;
-  document.getElementById('sepay-amount-display').textContent = tierData.label;
-  document.getElementById('sepay-amount-row').textContent = tierData.label;
-  document.getElementById('sepay-ref-display').textContent = ref;
-
-  // Lưu thông tin backer tạm
-  window._sepayBacker = { phone, name, tier: currentTier, amount, ref };
-
-  document.getElementById('sepay-phone-step').style.display = 'none';
-  document.getElementById('sepay-qr-step').style.display = 'block';
-}
-
-function checkSepayPayment() {
-  // Hiện trang cảm ơn sau khi backer xác nhận đã chuyển khoản
-  closePayment();
-  setTimeout(() => {
-    document.getElementById('thankyou').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }, 200);
 }
 
 // closePayment — reset về step 1
@@ -1852,6 +1785,22 @@ function loadFounderPhoto(url) {
 document.addEventListener('DOMContentLoaded', () => {
   applyTranslations('en');
   animateProgress();
+
+  // Modal click outside to close
+  const modal = document.getElementById('payment-modal');
+  if (modal) modal.addEventListener('click', function(e) {
+    if (e.target === this) closePayment();
+  });
+
+  // Paddle confirm button
+  const paddleBtn = document.getElementById('paddle-confirm');
+  if (paddleBtn) paddleBtn.addEventListener('click', function() {
+    closePayment();
+    setTimeout(() => {
+      document.getElementById('thankyou').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }, 200);
+  });
 });
 </script>
 </body>
